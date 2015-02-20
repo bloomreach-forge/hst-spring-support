@@ -46,6 +46,8 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
      */
     private boolean localizationContextResourceBundleEnabled = true;
 
+    private boolean repositoryResourceBundleEnabled = true;
+
     /**
      * Zero-argument default constructor.
      */
@@ -69,6 +71,14 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
         this.localizationContextResourceBundleEnabled = localizationContextResourceBundleEnabled;
     }
 
+    public boolean isRepositoryResourceBundleEnabled() {
+        return repositoryResourceBundleEnabled;
+    }
+
+    public void setRepositoryResourceBundleEnabled(boolean repositoryResourceBundleEnabled) {
+        this.repositoryResourceBundleEnabled = repositoryResourceBundleEnabled;
+    }
+
     /**
      * {@inheritDoc}
      * <p></p>
@@ -78,8 +88,6 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
      */
     @Override
     protected MessageFormat resolveCode(String code, Locale locale) {
-        MessageFormat messageFormat = null;
-
         if (isLocalizationContextResourceBundleEnabled()) {
             HstRequestContext requestContext = RequestContextProvider.get();
 
@@ -88,7 +96,7 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
                 final ResourceBundle defaultResourceBundle = localizationContext.getResourceBundle();
 
                 if (defaultResourceBundle != null) {
-                    messageFormat = getMessageFormat(defaultResourceBundle, code, locale);
+                    MessageFormat messageFormat = getMessageFormat(defaultResourceBundle, code, locale);
 
                     if (messageFormat != null) {
                         return messageFormat;
@@ -101,35 +109,56 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
     }
 
     /**
-     * Obtain the resource bundle for the given basename and Locale
-     * from the HST Resource Bundles first. If not found, then it
-     * falls back to the super class method, {@link ResourceBundleMessageSource#doGetBundle(String, Locale)}.
+     * {@inheritDoc}
      */
     @Override
-    protected ResourceBundle doGetBundle(String basename, Locale locale) throws MissingResourceException {
-        ResourceBundle bundle = null;
-        HstRequestContext requestContext = RequestContextProvider.get();
-
-        if (HstServices.isAvailable()) {
+    protected ResourceBundle getResourceBundle(String basename, Locale locale) {
+        if (isRepositoryResourceBundleEnabled() && HstServices.isAvailable()) {
             ResourceBundleRegistry resourceBundleRegistry =
                     HstServices.getComponentManager().getComponent(ResourceBundleRegistry.class.getName());
 
             if (resourceBundleRegistry != null) {
+                final HstRequestContext requestContext = RequestContextProvider.get();
                 boolean preview = (requestContext != null && requestContext.isPreview());
+                ResourceBundle bundle = null;
 
                 if (locale == null) {
                     bundle = (preview ? resourceBundleRegistry.getBundleForPreview(basename) : resourceBundleRegistry.getBundle(basename));
                 } else {
                     bundle = (preview ? resourceBundleRegistry.getBundleForPreview(basename, locale) : resourceBundleRegistry.getBundle(basename, locale));
                 }
+
+                if (bundle != null) {
+                    return bundle;
+                }
             }
         }
 
-        if (bundle == null) {
-            bundle = super.doGetBundle(basename, locale);
+        return super.getResourceBundle(basename, locale);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected MessageFormat getMessageFormat(ResourceBundle bundle, String code, Locale locale)
+            throws MissingResourceException {
+        String msg = getStringOrNull(bundle, code);
+
+        if (msg != null) {
+            MessageFormat result = createMessageFormat(msg, locale);
+            return result;
         }
 
-        return bundle;
+        return null;
+    }
+
+    private String getStringOrNull(ResourceBundle bundle, String key) {
+        try {
+            return bundle.getString(key);
+        } catch (MissingResourceException ex) {
+            return null;
+        }
     }
 
 }
