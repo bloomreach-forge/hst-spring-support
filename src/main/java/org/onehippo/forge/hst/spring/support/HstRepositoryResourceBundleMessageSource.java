@@ -31,37 +31,73 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 
 /**
  * {@link org.springframework.context.MessageSource} implementation that
- * accesses HST-2 Dynamic Resource Bundles first and falls back to the super class,
- * {@link ResourceBundleMessageSource} if not found from HST-2 Dynamic Resource Bundles.
+ * accesses {@link Config#get(javax.servlet.ServletRequest, String)} to read the default
+ * {@link LocalizationContext} which can be set by HST-2 Container (<code>LocalizationValve</code>).
+ * (if {@link #isLocalizationContextResourceBundleEnabled()} returns true (by default))
+ * to resolve {@link MessageFormat}.
+ * If  falls back to the super class,
+ * {@link ResourceBundleMessageSource}, if nothing found (from HST-2 Dynamic Resource Bundles).
  */
 public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMessageSource {
 
+    /**
+     * Flag whether or not the default resource bundle should be found from {@link LocalizationContext}
+     * by calling on {@link Config#get(javax.servlet.ServletRequest, String)}.
+     */
+    private boolean localizationContextResourceBundleEnabled = true;
+
+    /**
+     * Zero-argument default constructor.
+     */
     public HstRepositoryResourceBundleMessageSource() {
         super();
     }
 
     /**
+     * Returns true if the default resource bundle should be found from {@link LocalizationContext}
+     * by calling on {@link Config#get(javax.servlet.ServletRequest, String)}.
+     */
+    public boolean isLocalizationContextResourceBundleEnabled() {
+        return localizationContextResourceBundleEnabled;
+    }
+
+    /**
+     * Sets the flag whether or not the default resource bundle should be found from {@link LocalizationContext}
+     * by calling on {@link Config#get(javax.servlet.ServletRequest, String)}.
+     */
+    public void setLocalizationContextResourceBundleEnabled(boolean localizationContextResourceBundleEnabled) {
+        this.localizationContextResourceBundleEnabled = localizationContextResourceBundleEnabled;
+    }
+
+    /**
      * {@inheritDoc}
+     * <p></p>
+     * If {@link #isLocalizationContextResourceBundleEnabled()} returns true,
+     * then it tries to find the default resource bundle from {@link LocalizationContext} first.
+     * Otherwise or if not found, it proceeds to the default behavior.
      */
     @Override
     protected MessageFormat resolveCode(String code, Locale locale) {
         MessageFormat messageFormat = null;
-        HstRequestContext requestContext = RequestContextProvider.get();
 
-        if (requestContext != null) {
-            final LocalizationContext localizationContext = (LocalizationContext) Config.get(requestContext.getServletRequest(), Config.FMT_LOCALIZATION_CONTEXT);
-            final ResourceBundle defaultResourceBundle = localizationContext.getResourceBundle();
+        if (isLocalizationContextResourceBundleEnabled()) {
+            HstRequestContext requestContext = RequestContextProvider.get();
 
-            if (defaultResourceBundle != null) {
-                messageFormat = getMessageFormat(defaultResourceBundle, code, locale);
+            if (requestContext != null) {
+                final LocalizationContext localizationContext = (LocalizationContext) Config.get(requestContext.getServletRequest(), Config.FMT_LOCALIZATION_CONTEXT);
+                final ResourceBundle defaultResourceBundle = localizationContext.getResourceBundle();
+
+                if (defaultResourceBundle != null) {
+                    messageFormat = getMessageFormat(defaultResourceBundle, code, locale);
+
+                    if (messageFormat != null) {
+                        return messageFormat;
+                    }
+                }
             }
         }
 
-        if (messageFormat == null) {
-            messageFormat = super.resolveCode(code, locale);
-        }
-
-        return messageFormat;
+        return super.resolveCode(code, locale);
     }
 
     /**
@@ -72,13 +108,13 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
     @Override
     protected ResourceBundle doGetBundle(String basename, Locale locale) throws MissingResourceException {
         ResourceBundle bundle = null;
+        HstRequestContext requestContext = RequestContextProvider.get();
 
         if (HstServices.isAvailable()) {
             ResourceBundleRegistry resourceBundleRegistry =
                     HstServices.getComponentManager().getComponent(ResourceBundleRegistry.class.getName());
 
             if (resourceBundleRegistry != null) {
-                HstRequestContext requestContext = RequestContextProvider.get();
                 boolean preview = (requestContext != null && requestContext.isPreview());
 
                 if (locale == null) {

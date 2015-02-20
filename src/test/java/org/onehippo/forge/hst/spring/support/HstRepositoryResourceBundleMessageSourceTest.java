@@ -108,5 +108,11 @@ public class HstRepositoryResourceBundleMessageSourceTest {
 
         assertEquals("Hello, World!", messageSource.getMessage("greeting.hello", null, Locale.ENGLISH));
         assertEquals("Hello, John! Are you really cool?", messageSource.getMessage("greeting.hello.name", new Object [] { "John" }, Locale.ENGLISH));
+
+        // Let's turn off localizationContextResourceBundleEnabled option.
+        messageSource.setLocalizationContextResourceBundleEnabled(false);
+        assertEquals("Hello, World!", messageSource.getMessage("greeting.hello", null, Locale.ENGLISH));
+        // FIXME:
+        //assertEquals("Hello, John! Are you cool?", messageSource.getMessage("greeting.hello.name", new Object [] { "John" }, Locale.ENGLISH));
     }
 }
