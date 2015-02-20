@@ -15,9 +15,13 @@
  */
 package org.onehippo.forge.hst.spring.support;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
+import javax.servlet.jsp.jstl.core.Config;
+import javax.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import org.hippoecm.hst.container.RequestContextProvider;
 import org.hippoecm.hst.core.request.HstRequestContext;
@@ -37,6 +41,30 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected MessageFormat resolveCode(String code, Locale locale) {
+        MessageFormat messageFormat = null;
+        HstRequestContext requestContext = RequestContextProvider.get();
+
+        if (requestContext != null) {
+            final LocalizationContext localizationContext = (LocalizationContext) Config.get(requestContext.getServletRequest(), Config.FMT_LOCALIZATION_CONTEXT);
+            final ResourceBundle defaultResourceBundle = localizationContext.getResourceBundle();
+
+            if (defaultResourceBundle != null) {
+                messageFormat = getMessageFormat(defaultResourceBundle, code, locale);
+            }
+        }
+
+        if (messageFormat == null) {
+            messageFormat = super.resolveCode(code, locale);
+        }
+
+        return messageFormat;
+    }
+
+    /**
      * Obtain the resource bundle for the given basename and Locale
      * from the HST Resource Bundles first. If not found, then it
      * falls back to the super class method, {@link ResourceBundleMessageSource#doGetBundle(String, Locale)}.
@@ -45,17 +73,19 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
     protected ResourceBundle doGetBundle(String basename, Locale locale) throws MissingResourceException {
         ResourceBundle bundle = null;
 
-        ResourceBundleRegistry resourceBundleRegistry =
-                HstServices.getComponentManager().getComponent(ResourceBundleRegistry.class.getName());
+        if (HstServices.isAvailable()) {
+            ResourceBundleRegistry resourceBundleRegistry =
+                    HstServices.getComponentManager().getComponent(ResourceBundleRegistry.class.getName());
 
-        if (resourceBundleRegistry != null) {
-            HstRequestContext requestContext = RequestContextProvider.get();
-            boolean preview = (requestContext != null && requestContext.isPreview());
+            if (resourceBundleRegistry != null) {
+                HstRequestContext requestContext = RequestContextProvider.get();
+                boolean preview = (requestContext != null && requestContext.isPreview());
 
-            if (locale == null) {
-                bundle = (preview ? resourceBundleRegistry.getBundleForPreview(basename) : resourceBundleRegistry.getBundle(basename));
-            } else {
-                bundle = (preview ? resourceBundleRegistry.getBundleForPreview(basename, locale) : resourceBundleRegistry.getBundle(basename, locale));
+                if (locale == null) {
+                    bundle = (preview ? resourceBundleRegistry.getBundleForPreview(basename) : resourceBundleRegistry.getBundle(basename));
+                } else {
+                    bundle = (preview ? resourceBundleRegistry.getBundleForPreview(basename, locale) : resourceBundleRegistry.getBundle(basename, locale));
+                }
             }
         }
 

@@ -29,6 +29,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.build.javaVersion>1.6</project.build.javaVersion>
 
+    <javax.jcr.version>2.0</javax.jcr.version>
+    <servlet-api.version>2.5</servlet-api.version>
+    <jstl.version>1.1.2</jstl.version>
+
     <hippo.hst.version>2.28.08</hippo.hst.version>
     <spring.version>3.2.8.RELEASE</spring.version>
 
@@ -114,6 +118,27 @@
   </repositories>
 
   <dependencies>
+
+    <dependency>
+      <groupId>javax.jcr</groupId>
+      <artifactId>jcr</artifactId>
+      <version>${javax.jcr.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>${servlet-api.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>jstl</artifactId>
+      <version>${jstl.version}</version>
+      <scope>provided</scope>
+    </dependency>
 
     <dependency>
       <groupId>org.onehippo.cms7.hst</groupId>
@@ -218,6 +243,27 @@
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
       <version>${lib.easymock.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.onehippo.cms7.hst</groupId>
+      <artifactId>hst-mock</artifactId>
+      <version>${hippo.hst.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.onehippo.cms7.hst.components</groupId>
+      <artifactId>hst-resourcebundle</artifactId>
+      <version>${hippo.hst.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
       <scope>test</scope>
     </dependency>
 

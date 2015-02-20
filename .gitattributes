@@ -51,3 +51,4 @@ src/site/resources/sh/styles/shThemeMidnight.css -text
 src/site/resources/sh/styles/shThemeRDark.css -text
 src/site/site.xml -text svneol=unset#application/xml
 src/site/xdoc/index.xml -text svneol=unset#application/xml
+src/test/java/org/onehippo/forge/hst/spring/support/HstRepositoryResourceBundleMessageSourceTest.java -text svneol=unset#text/plain
