@@ -113,6 +113,30 @@ public class CachingResourceBundleMessageFormatProvider extends MessageSourceSup
         }
     }
 
+    /**
+     * Test purpose getter.
+     * @return
+     */
+    protected Map<ResourceBundle, Map<String, Map<Locale, MessageFormat>>> getCachedBundleMessageFormats() {
+        return cachedBundleMessageFormats;
+    }
+
+    /**
+     * Test purpose getter.
+     * @return
+     */
+    protected Map<ResourceBundle, KeyValue<String, Locale>> getBundleBasenameLocales() {
+        return bundleBasenameLocales;
+    }
+
+    /**
+     * Test purpose getter.
+     * @return
+     */
+    protected Map<KeyValue<String, Locale>, ResourceBundle> getBasenameLocaleBundles() {
+        return basenameLocaleBundles;
+    }
+
     private String getStringOrNull(ResourceBundle bundle, String key) {
         try {
             return bundle.getString(key);

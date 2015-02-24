@@ -28,6 +28,18 @@ import java.util.ResourceBundle;
  */
 public interface RepositoryResourceBundleMessageFormatProvider {
 
+    /**
+     * Register the <code>bundle</code> by the <code>basename</code> and <code>locale<code>
+     * in order to be able to determine that the <code>bundle</code> was originated from repository.
+     * <p>
+     * Note: Whenever retrieve a resource bundle from repository, this method should be invoked.
+     *       Then this implementation should register it if not yet done or clear any outdated
+     *       cache associated with the <code>basename</code> and <code>locale</code> for a refreshed bundle.
+     * </p>
+     * @param basename
+     * @param locale
+     * @param bundle
+     */
     public void registerBundle(String basename, Locale locale, ResourceBundle bundle);
 
     /**

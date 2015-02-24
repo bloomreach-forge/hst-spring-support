@@ -98,10 +98,20 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
         this.repositoryResourceBundleEnabled = repositoryResourceBundleEnabled;
     }
 
+    /**
+     * Returns {@link RepositoryResourceBundleMessageFormatProvider} internally used for
+     * maintaining repository-based resource bundles and message formats from them.
+     * @return
+     */
     public RepositoryResourceBundleMessageFormatProvider getResourceBundleMessageFormatProvider() {
         return resourceBundleMessageFormatProvider;
     }
 
+    /**
+     * Sets {@link RepositoryResourceBundleMessageFormatProvider} internally to be used for
+     * maintaining repository-based resource bundles and message formats from them.
+     * @param resourceBundleMessageFormatProvider
+     */
     public void setResourceBundleMessageFormatProvider(
             RepositoryResourceBundleMessageFormatProvider resourceBundleMessageFormatProvider) {
         this.resourceBundleMessageFormatProvider = resourceBundleMessageFormatProvider;
@@ -124,6 +134,7 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
                 final ResourceBundle defaultResourceBundle = localizationContext.getResourceBundle();
 
                 if (defaultResourceBundle != null) {
+                    // Use empty string basename for the default localization context resource bundle.
                     resourceBundleMessageFormatProvider.registerBundle("", locale, defaultResourceBundle);
 
                     MessageFormat messageFormat = getMessageFormat(defaultResourceBundle, code, locale);
