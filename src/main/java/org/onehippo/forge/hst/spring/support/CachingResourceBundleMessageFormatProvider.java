@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.hippoecm.hst.container.RequestContextProvider;
+import org.hippoecm.hst.core.request.HstRequestContext;
 import org.hippoecm.hst.util.DefaultKeyValue;
 import org.hippoecm.hst.util.KeyValue;
 import org.springframework.context.support.MessageSourceSupport;
@@ -32,7 +34,7 @@ import org.springframework.context.support.MessageSourceSupport;
 public class CachingResourceBundleMessageFormatProvider extends MessageSourceSupport implements RepositoryResourceBundleMessageFormatProvider {
 
     /**
-     * Cache to hold already generated MessageFormats.
+     * Cache to hold already generated live MessageFormats.
      * This Map is keyed with the ResourceBundle, which holds a Map that is
      * keyed with the message code, which in turn holds a Map that is keyed
      * with the Locale and holds the MessageFormat values.
@@ -42,15 +44,37 @@ public class CachingResourceBundleMessageFormatProvider extends MessageSourceSup
             new HashMap<ResourceBundle, Map<String, Map<Locale, MessageFormat>>>();
 
     /**
-     * Cache to hold basename and locale per resource bundle.
+     * Cache to hold basename and locale per live resource bundle.
      */
     private final Map<ResourceBundle, KeyValue<String, Locale>> bundleBasenameLocales =
             new HashMap<ResourceBundle, KeyValue<String, Locale>>();
 
     /**
-     * Cache to hold resource bundles per each basename and locale.
+     * Cache to hold live resource bundles per each basename and locale.
      */
     private final Map<KeyValue<String, Locale>, ResourceBundle> basenameLocaleBundles =
+            new HashMap<KeyValue<String, Locale>, ResourceBundle>();
+
+    /**
+     * Cache to hold already generated preview MessageFormats.
+     * This Map is keyed with the ResourceBundle, which holds a Map that is
+     * keyed with the message code, which in turn holds a Map that is keyed
+     * with the Locale and holds the MessageFormat values.
+     * @see #getMessageFormat
+     */
+    private final Map<ResourceBundle, Map<String, Map<Locale, MessageFormat>>> cachedBundleMessageFormatsForPreview =
+            new HashMap<ResourceBundle, Map<String, Map<Locale, MessageFormat>>>();
+
+    /**
+     * Cache to hold basename and locale per preview resource bundle.
+     */
+    private final Map<ResourceBundle, KeyValue<String, Locale>> bundleBasenameLocalesForPreview =
+            new HashMap<ResourceBundle, KeyValue<String, Locale>>();
+
+    /**
+     * Cache to hold preview resource bundles per each basename and locale.
+     */
+    private final Map<KeyValue<String, Locale>, ResourceBundle> basenameLocaleBundlesForPreview =
             new HashMap<KeyValue<String, Locale>, ResourceBundle>();
 
     /**
@@ -77,14 +101,46 @@ public class CachingResourceBundleMessageFormatProvider extends MessageSourceSup
     /**
      * {@inheritDoc}
      */
+    public void registerPreviewBundle(String basename, Locale locale, ResourceBundle bundle) {
+        KeyValue<String, Locale> pair = new DefaultKeyValue<String, Locale>(basename, locale);
+
+        synchronized (cachedBundleMessageFormatsForPreview) {
+            ResourceBundle oldBundle = basenameLocaleBundlesForPreview.get(pair);
+
+            if (oldBundle != null && oldBundle != bundle) {
+                cachedBundleMessageFormatsForPreview.remove(oldBundle);
+                bundleBasenameLocalesForPreview.remove(oldBundle);
+                basenameLocaleBundlesForPreview.remove(pair);
+            }
+
+            cachedBundleMessageFormatsForPreview.put(bundle, new HashMap<String, Map<Locale, MessageFormat>>());
+            bundleBasenameLocalesForPreview.put(bundle, pair);
+            basenameLocaleBundlesForPreview.put(pair, bundle);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MessageFormat getMessageFormat(ResourceBundle bundle, String code, Locale locale) {
-        synchronized (cachedBundleMessageFormats) {
-            if (!bundleBasenameLocales.containsKey(bundle)) {
+        Map<ResourceBundle, Map<String, Map<Locale, MessageFormat>>> contextCachedBundleMessageFormats =
+                cachedBundleMessageFormats;
+        Map<ResourceBundle, KeyValue<String, Locale>> contextBundleBasenameLocales = bundleBasenameLocales;
+
+        final HstRequestContext requestContext = RequestContextProvider.get();
+
+        if (requestContext != null && requestContext.isPreview()) {
+            contextCachedBundleMessageFormats = cachedBundleMessageFormatsForPreview;
+            contextBundleBasenameLocales = bundleBasenameLocalesForPreview;
+        }
+
+        synchronized (contextCachedBundleMessageFormats) {
+            if (!contextBundleBasenameLocales.containsKey(bundle)) {
                 return null;
             }
 
-            Map<String, Map<Locale, MessageFormat>> codeMap = cachedBundleMessageFormats.get(bundle);
+            Map<String, Map<Locale, MessageFormat>> codeMap = contextCachedBundleMessageFormats.get(bundle);
             Map<Locale, MessageFormat> localeMap = codeMap.get(code);
 
             if (localeMap != null) {
@@ -135,6 +191,30 @@ public class CachingResourceBundleMessageFormatProvider extends MessageSourceSup
      */
     protected Map<KeyValue<String, Locale>, ResourceBundle> getBasenameLocaleBundles() {
         return basenameLocaleBundles;
+    }
+
+    /**
+     * Test purpose getter.
+     * @return
+     */
+    protected Map<ResourceBundle, Map<String, Map<Locale, MessageFormat>>> getCachedBundleMessageFormatsForPreview() {
+        return cachedBundleMessageFormatsForPreview;
+    }
+
+    /**
+     * Test purpose getter.
+     * @return
+     */
+    protected Map<ResourceBundle, KeyValue<String, Locale>> getBundleBasenameLocalesForPreview() {
+        return bundleBasenameLocalesForPreview;
+    }
+
+    /**
+     * Test purpose getter.
+     * @return
+     */
+    protected Map<KeyValue<String, Locale>, ResourceBundle> getBasenameLocaleBundlesForPreview() {
+        return basenameLocaleBundlesForPreview;
     }
 
     private String getStringOrNull(ResourceBundle bundle, String key) {

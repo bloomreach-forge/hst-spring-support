@@ -128,19 +128,27 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
     protected MessageFormat resolveCode(String code, Locale locale) {
         if (isLocalizationContextResourceBundleEnabled()) {
             HstRequestContext requestContext = RequestContextProvider.get();
+            boolean preview = (requestContext != null && requestContext.isPreview());
 
             if (requestContext != null) {
                 final LocalizationContext localizationContext = (LocalizationContext) Config.get(requestContext.getServletRequest(), Config.FMT_LOCALIZATION_CONTEXT);
-                final ResourceBundle defaultResourceBundle = localizationContext.getResourceBundle();
 
-                if (defaultResourceBundle != null) {
-                    // Use empty string basename for the default localization context resource bundle.
-                    resourceBundleMessageFormatProvider.registerBundle("", locale, defaultResourceBundle);
+                if (localizationContext != null) {
+                    final ResourceBundle defaultResourceBundle = localizationContext.getResourceBundle();
 
-                    MessageFormat messageFormat = getMessageFormat(defaultResourceBundle, code, locale);
+                    if (defaultResourceBundle != null) {
+                        // Use empty string basename for the default localization context resource bundle.
+                        if (preview) {
+                            resourceBundleMessageFormatProvider.registerPreviewBundle("", locale, defaultResourceBundle);
+                        } else {
+                            resourceBundleMessageFormatProvider.registerBundle("", locale, defaultResourceBundle);
+                        }
 
-                    if (messageFormat != null) {
-                        return messageFormat;
+                        MessageFormat messageFormat = getMessageFormat(defaultResourceBundle, code, locale);
+
+                        if (messageFormat != null) {
+                            return messageFormat;
+                        }
                     }
                 }
             }
@@ -174,7 +182,12 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
                 }
 
                 if (bundle != null) {
-                    resourceBundleMessageFormatProvider.registerBundle(basename, locale, bundle);
+                    if (preview) {
+                        resourceBundleMessageFormatProvider.registerPreviewBundle(basename, locale, bundle);
+                    } else {
+                        resourceBundleMessageFormatProvider.registerBundle(basename, locale, bundle);
+                    }
+
                     return bundle;
                 }
             }
