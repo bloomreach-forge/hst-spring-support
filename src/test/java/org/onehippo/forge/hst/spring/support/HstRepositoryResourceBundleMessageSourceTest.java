@@ -60,7 +60,7 @@ public class HstRepositoryResourceBundleMessageSourceTest {
     private ResourceBundle previewBundle;
 
     private HstRepositoryResourceBundleMessageSource messageSource;
-    private CachingResourceBundleMessageFormatProvider messageFormatProvider;
+    private CachingRepositoryResourceBundleMessageFormatProvider messageFormatProvider;
 
     private boolean previewMode;
 
@@ -89,7 +89,7 @@ public class HstRepositoryResourceBundleMessageSourceTest {
         HstServices.setComponentManager(componentManager);
 
         messageSource = new HstRepositoryResourceBundleMessageSource();
-        messageFormatProvider = (CachingResourceBundleMessageFormatProvider) messageSource.getResourceBundleMessageFormatProvider();
+        messageFormatProvider = (CachingRepositoryResourceBundleMessageFormatProvider) messageSource.getResourceBundleMessageFormatProvider();
 
         assertEquals(0, messageFormatProvider.getBasenameLocaleBundles().size());
         assertEquals(0, messageFormatProvider.getBundleBasenameLocales().size());

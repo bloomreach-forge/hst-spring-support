@@ -1,6 +1,6 @@
 * text=auto !eol
 /pom.xml -text svneol=unset#application/xml
-src/main/java/org/onehippo/forge/hst/spring/support/CachingResourceBundleMessageFormatProvider.java -text svneol=unset#text/plain
+src/main/java/org/onehippo/forge/hst/spring/support/CachingRepositoryResourceBundleMessageFormatProvider.java -text svneol=unset#text/plain
 src/main/java/org/onehippo/forge/hst/spring/support/HstRepositoryResourceBundleMessageSource.java -text svneol=unset#text/plain
 src/main/java/org/onehippo/forge/hst/spring/support/RepositoryResourceBundleMessageFormatProvider.java -text svneol=unset#text/plain
 src/site/checkstyle.xml -text svneol=unset#application/xml
@@ -52,5 +52,8 @@ src/site/resources/sh/styles/shThemeMDUltra.css -text
 src/site/resources/sh/styles/shThemeMidnight.css -text
 src/site/resources/sh/styles/shThemeRDark.css -text
 src/site/site.xml -text svneol=unset#application/xml
+src/site/xdoc/build-from-source.xml -text svneol=unset#text/plain
+src/site/xdoc/hst-resource-bundles.xml -text svneol=unset#text/plain
 src/site/xdoc/index.xml -text svneol=unset#application/xml
+src/site/xdoc/release-notes.xml -text svneol=unset#text/plain
 src/test/java/org/onehippo/forge/hst/spring/support/HstRepositoryResourceBundleMessageSourceTest.java -text svneol=unset#text/plain

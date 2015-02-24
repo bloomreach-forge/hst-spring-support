@@ -55,7 +55,7 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
      */
     private boolean repositoryResourceBundleEnabled = true;
 
-    private RepositoryResourceBundleMessageFormatProvider resourceBundleMessageFormatProvider = new CachingResourceBundleMessageFormatProvider();
+    private RepositoryResourceBundleMessageFormatProvider resourceBundleMessageFormatProvider = new CachingRepositoryResourceBundleMessageFormatProvider();
 
     /**
      * Zero-argument default constructor.

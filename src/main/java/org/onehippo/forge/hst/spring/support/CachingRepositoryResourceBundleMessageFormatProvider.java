@@ -31,7 +31,7 @@ import org.springframework.context.support.MessageSourceSupport;
 /**
  * CachingRepositoryResourceBundleMessageFormatProvider.
  */
-public class CachingResourceBundleMessageFormatProvider extends MessageSourceSupport implements RepositoryResourceBundleMessageFormatProvider {
+public class CachingRepositoryResourceBundleMessageFormatProvider extends MessageSourceSupport implements RepositoryResourceBundleMessageFormatProvider {
 
     /**
      * Cache to hold already generated live MessageFormats.

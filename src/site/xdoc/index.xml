@@ -19,7 +19,20 @@
     <section name="Introduction">
       <subsection name="What is HST - Spring Framework Support?">
         <p>
-          TODO
+          This project provides components which fill the gap between HST-2 framework and Spring Framework.
+        </p>
+        <p>
+          For example, HST-2 supports 
+          <a href="http://www.onehippo.org/library/concepts/translations/hst-2-dynamic-resource-bundles-support.html">Dynamic ResourceBundle</a>
+          stored in the repository.
+          However, <a href="http://docs.spring.io/spring/docs/3.2.13.RELEASE/spring-framework-reference/htmlsingle/#context-functionality-messagesource">Spring Framework Internationalization Support with MessageSource</a>
+          is unaware of how to retrieve HST-2 Dynamic ResourceBundles using HST-2 API.
+          Therefore, this project provides <a href="apidocs/org/onehippo/forge/hst/spring/support/HstRepositoryResourceBundleMessageSource.html">HstRepositoryResourceBundleMessageSource</a>
+          to be able to use HST-2 Dyanmic ResourceBundles as well as the default Java ResourceBundles provided by Spring Framework.
+        </p>
+        <p>
+          Whenever there's any gap found between HST-2 Framework and Spring Framework,
+          this project will keep providing proper solutions to make seamless integration between two.
         </p>
       </subsection>
     </section>
