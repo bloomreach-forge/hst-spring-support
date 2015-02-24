@@ -42,11 +42,20 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
 
     /**
      * Flag whether or not the default resource bundle should be found from {@link LocalizationContext}
-     * by calling on {@link Config#get(javax.servlet.ServletRequest, String)}.
+     * by calling on {@link Config#get(javax.servlet.ServletRequest, String)}
+     * in {@link #resolveCode(String, Locale)}.
+     * It's true by default.
      */
     private boolean localizationContextResourceBundleEnabled = true;
 
+    /**
+     * Flag whether or not the repository resource bundle documents should be looked up
+     * in {@link #getResourceBundle(String, Locale)}.
+     * It's true by default.
+     */
     private boolean repositoryResourceBundleEnabled = true;
+
+    private RepositoryResourceBundleMessageFormatProvider resourceBundleMessageFormatProvider = new CachingResourceBundleMessageFormatProvider();
 
     /**
      * Zero-argument default constructor.
@@ -71,12 +80,31 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
         this.localizationContextResourceBundleEnabled = localizationContextResourceBundleEnabled;
     }
 
+    /**
+     * Returns true if the repository resource bundle documents should be looked up
+     * in {@link #getResourceBundle(String, Locale)}.
+     * @return
+     */
     public boolean isRepositoryResourceBundleEnabled() {
         return repositoryResourceBundleEnabled;
     }
 
+    /**
+     * Sets the flag whether or not the repository resource bundle documents should be looked up
+     * in {@link #getResourceBundle(String, Locale)}.
+     * @param repositoryResourceBundleEnabled
+     */
     public void setRepositoryResourceBundleEnabled(boolean repositoryResourceBundleEnabled) {
         this.repositoryResourceBundleEnabled = repositoryResourceBundleEnabled;
+    }
+
+    public RepositoryResourceBundleMessageFormatProvider getResourceBundleMessageFormatProvider() {
+        return resourceBundleMessageFormatProvider;
+    }
+
+    public void setResourceBundleMessageFormatProvider(
+            RepositoryResourceBundleMessageFormatProvider resourceBundleMessageFormatProvider) {
+        this.resourceBundleMessageFormatProvider = resourceBundleMessageFormatProvider;
     }
 
     /**
@@ -84,7 +112,7 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
      * <p></p>
      * If {@link #isLocalizationContextResourceBundleEnabled()} returns true,
      * then it tries to find the default resource bundle from {@link LocalizationContext} first.
-     * Otherwise or if not found, it proceeds to the default behavior.
+     * Otherwise or if not found, it proceeds with the default behavior.
      */
     @Override
     protected MessageFormat resolveCode(String code, Locale locale) {
@@ -96,6 +124,8 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
                 final ResourceBundle defaultResourceBundle = localizationContext.getResourceBundle();
 
                 if (defaultResourceBundle != null) {
+                    resourceBundleMessageFormatProvider.registerBundle("", locale, defaultResourceBundle);
+
                     MessageFormat messageFormat = getMessageFormat(defaultResourceBundle, code, locale);
 
                     if (messageFormat != null) {
@@ -110,6 +140,10 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
 
     /**
      * {@inheritDoc}
+     * <p></p>
+     * If {@link #isRepositoryResourceBundleEnabled()} returns true, then it first looks up
+     * resource bundle from the repository.
+     * Otherwise or if not found, it proceeds with the default behavior.
      */
     @Override
     protected ResourceBundle getResourceBundle(String basename, Locale locale) {
@@ -129,6 +163,7 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
                 }
 
                 if (bundle != null) {
+                    resourceBundleMessageFormatProvider.registerBundle(basename, locale, bundle);
                     return bundle;
                 }
             }
@@ -138,27 +173,19 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
     }
 
     /**
-     * {@inheritDoc}
+     * Return a MessageFormat for the given bundle and code,
+     * fetching already generated MessageFormats from the cache.
      */
     @Override
     protected MessageFormat getMessageFormat(ResourceBundle bundle, String code, Locale locale)
             throws MissingResourceException {
-        String msg = getStringOrNull(bundle, code);
+        MessageFormat messageFormat = resourceBundleMessageFormatProvider.getMessageFormat(bundle, code, locale);
 
-        if (msg != null) {
-            MessageFormat result = createMessageFormat(msg, locale);
-            return result;
+        if (messageFormat != null) {
+            return messageFormat;
         }
 
-        return null;
-    }
-
-    private String getStringOrNull(ResourceBundle bundle, String key) {
-        try {
-            return bundle.getString(key);
-        } catch (MissingResourceException ex) {
-            return null;
-        }
+        return super.getMessageFormat(bundle, code, locale);
     }
 
 }
