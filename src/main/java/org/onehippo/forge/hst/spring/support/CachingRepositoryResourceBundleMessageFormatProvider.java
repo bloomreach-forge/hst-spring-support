@@ -86,15 +86,16 @@ public class CachingRepositoryResourceBundleMessageFormatProvider extends Messag
         synchronized (cachedBundleMessageFormats) {
             ResourceBundle oldBundle = basenameLocaleBundles.get(pair);
 
-            if (oldBundle != null && oldBundle != bundle) {
-                cachedBundleMessageFormats.remove(oldBundle);
-                bundleBasenameLocales.remove(oldBundle);
-                basenameLocaleBundles.remove(pair);
-            }
+            if (oldBundle != bundle) {
+                if (oldBundle != null) {
+                    cachedBundleMessageFormats.remove(oldBundle);
+                    bundleBasenameLocales.remove(oldBundle);
+                }
 
-            cachedBundleMessageFormats.put(bundle, new HashMap<String, Map<Locale, MessageFormat>>());
-            bundleBasenameLocales.put(bundle, pair);
-            basenameLocaleBundles.put(pair, bundle);
+                cachedBundleMessageFormats.put(bundle, new HashMap<String, Map<Locale, MessageFormat>>());
+                bundleBasenameLocales.put(bundle, pair);
+                basenameLocaleBundles.put(pair, bundle);
+            }
         }
     }
 
@@ -107,15 +108,16 @@ public class CachingRepositoryResourceBundleMessageFormatProvider extends Messag
         synchronized (cachedBundleMessageFormatsForPreview) {
             ResourceBundle oldBundle = basenameLocaleBundlesForPreview.get(pair);
 
-            if (oldBundle != null && oldBundle != bundle) {
-                cachedBundleMessageFormatsForPreview.remove(oldBundle);
-                bundleBasenameLocalesForPreview.remove(oldBundle);
-                basenameLocaleBundlesForPreview.remove(pair);
-            }
+            if (oldBundle != bundle) {
+                if (oldBundle != null) {
+                    cachedBundleMessageFormatsForPreview.remove(oldBundle);
+                    bundleBasenameLocalesForPreview.remove(oldBundle);
+                }
 
-            cachedBundleMessageFormatsForPreview.put(bundle, new HashMap<String, Map<Locale, MessageFormat>>());
-            bundleBasenameLocalesForPreview.put(bundle, pair);
-            basenameLocaleBundlesForPreview.put(pair, bundle);
+                cachedBundleMessageFormatsForPreview.put(bundle, new HashMap<String, Map<Locale, MessageFormat>>());
+                bundleBasenameLocalesForPreview.put(bundle, pair);
+                basenameLocaleBundlesForPreview.put(pair, bundle);
+            }
         }
     }
 

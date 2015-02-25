@@ -35,6 +35,13 @@
           this project will keep providing proper solutions to make seamless integration between two.
         </p>
       </subsection>
+      <subsection name="HST-2 - Spring Framework Integration References">
+        <ul>
+          <li><a href="http://www.onehippo.org/library/concepts/web-application/spring-mvc-bridge.html">Component Level Integration - Spring MVC Bridge</a></li>
+          <li><a href="http://www.onehippo.org/library/concepts/web-application/spring-bridge.html">Component Level Integration - Spring Bean Bridge</a></li>
+          <li><a href="http://www.onehippo.org/library/concepts/integration/hst-container-integration-with-other-web-application-frameworks.html">Component Level Integration - Spring MVC Bridge</a></li>
+        </ul>
+      </subsection>
     </section>
     <section name="Project status">
       <p>

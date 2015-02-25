@@ -57,3 +57,5 @@ src/site/xdoc/hst-resource-bundles.xml -text svneol=unset#text/plain
 src/site/xdoc/index.xml -text svneol=unset#application/xml
 src/site/xdoc/release-notes.xml -text svneol=unset#text/plain
 src/test/java/org/onehippo/forge/hst/spring/support/HstRepositoryResourceBundleMessageSourceTest.java -text svneol=unset#text/plain
+src/test/resources/org/onehippo/forge/hst/spring/support/MessageResources.properties -text svneol=unset#text/plain
+src/test/resources/org/onehippo/forge/hst/spring/support/MessageResources_en.properties -text svneol=unset#text/plain

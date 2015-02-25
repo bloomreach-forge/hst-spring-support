@@ -39,6 +39,7 @@ import org.hippoecm.hst.util.DefaultKeyValue;
 import org.hippoecm.hst.util.KeyValue;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.support.DelegatingMessageSource;
 import org.springframework.mock.web.MockHttpServletRequest;
 
 /**
@@ -46,7 +47,9 @@ import org.springframework.mock.web.MockHttpServletRequest;
  */
 public class HstRepositoryResourceBundleMessageSourceTest {
 
-    private static final String BUNDLE_ID = HstRepositoryResourceBundleMessageSourceTest.class.getPackage().getName();
+    private static final String FILE_BUNDLE_ID = HstRepositoryResourceBundleMessageSourceTest.class.getPackage().getName() + ".MessageResources";
+
+    private static final String REPOSITORY_BUNDLE_ID = HstRepositoryResourceBundleMessageSourceTest.class.getPackage().getName();
 
     private DefaultMutableResourceBundleRegistry registry;
 
@@ -77,11 +80,12 @@ public class HstRepositoryResourceBundleMessageSourceTest {
         previewBundleContent.put("greeting.hello.name", "[Preview] Hello, {0}!");
         previewBundle = new SimpleListResourceBundle(previewBundleContent);
 
-        final DefaultMutableResourceBundleFamily bundleFamily = new DefaultMutableResourceBundleFamily(BUNDLE_ID);
+        final DefaultMutableResourceBundleFamily bundleFamily = new DefaultMutableResourceBundleFamily(REPOSITORY_BUNDLE_ID);
         bundleFamily.setDefaultBundle(liveBundle);
         bundleFamily.setDefaultBundleForPreview(previewBundle);
         registry = new DefaultMutableResourceBundleRegistry();
-        registry.registerBundleFamily(BUNDLE_ID, bundleFamily);
+        registry.setFallbackToJavaResourceBundle(true);
+        registry.registerBundleFamily(REPOSITORY_BUNDLE_ID, bundleFamily);
 
         final ComponentManager componentManager = EasyMock.createNiceMock(ComponentManager.class);
         EasyMock.expect(componentManager.getComponent(ResourceBundleRegistry.class.getName())).andReturn(registry).anyTimes();
@@ -98,7 +102,7 @@ public class HstRepositoryResourceBundleMessageSourceTest {
         assertEquals(0, messageFormatProvider.getBundleBasenameLocalesForPreview().size());
         assertEquals(0, messageFormatProvider.getCachedBundleMessageFormatsForPreview().size());
 
-        messageSource.setBasename(BUNDLE_ID);
+        messageSource.setBasenames(new String [] { REPOSITORY_BUNDLE_ID, FILE_BUNDLE_ID });
 
         final Map<String, String> defaultBundleContent = new HashMap<String, String>(bundleContent);
         defaultBundleContent.put("greeting.hello.name", "Hello, {0}! Are you cool?");
@@ -121,16 +125,19 @@ public class HstRepositoryResourceBundleMessageSourceTest {
 
     @Test
     public void testWithoutSettingNoLocalizationContextBundle() throws Exception {
+        assertEquals("Hello, World!", messageSource.getMessage("file.greeting.hello", null, Locale.ENGLISH));
+        assertEquals("Hello, John!", messageSource.getMessage("file.greeting.hello.name", new Object [] { "John" }, Locale.ENGLISH));
+
         assertEquals("Hello, World!", messageSource.getMessage("greeting.hello", null, Locale.ENGLISH));
         assertEquals("Hello, John!", messageSource.getMessage("greeting.hello.name", new Object [] { "John" }, Locale.ENGLISH));
 
-        KeyValue<String, Locale> bundleIdLocalePair = new DefaultKeyValue<String, Locale>(BUNDLE_ID, Locale.ENGLISH);
+        KeyValue<String, Locale> bundleIdLocalePair = new DefaultKeyValue<String, Locale>(REPOSITORY_BUNDLE_ID, Locale.ENGLISH);
 
-        assertEquals(1, messageFormatProvider.getBasenameLocaleBundles().size());
+        assertEquals(2, messageFormatProvider.getBasenameLocaleBundles().size());
         assertEquals(liveBundle, messageFormatProvider.getBasenameLocaleBundles().get(bundleIdLocalePair));
-        assertEquals(1, messageFormatProvider.getBundleBasenameLocales().size());
+        assertEquals(2, messageFormatProvider.getBundleBasenameLocales().size());
         assertEquals(bundleIdLocalePair, messageFormatProvider.getBundleBasenameLocales().get(liveBundle));
-        assertEquals(1, messageFormatProvider.getCachedBundleMessageFormats().size());
+        assertEquals(2, messageFormatProvider.getCachedBundleMessageFormats().size());
         Map<String, Map<Locale, MessageFormat>> messageFormats = messageFormatProvider.getCachedBundleMessageFormats().get(liveBundle);
         // We didn't pass arguments for 'greeting.hello', so it is not parsed as MessageFormat.
         assertEquals(1, messageFormats.size());
@@ -144,11 +151,11 @@ public class HstRepositoryResourceBundleMessageSourceTest {
         assertEquals("[Preview] Hello, World!", messageSource.getMessage("greeting.hello", null, Locale.ENGLISH));
         assertEquals("[Preview] Hello, John!", messageSource.getMessage("greeting.hello.name", new Object [] { "John" }, Locale.ENGLISH));
 
-        assertEquals(1, messageFormatProvider.getBasenameLocaleBundles().size());
+        assertEquals(2, messageFormatProvider.getBasenameLocaleBundles().size());
         assertEquals(liveBundle, messageFormatProvider.getBasenameLocaleBundles().get(bundleIdLocalePair));
-        assertEquals(1, messageFormatProvider.getBundleBasenameLocales().size());
+        assertEquals(2, messageFormatProvider.getBundleBasenameLocales().size());
         assertEquals(bundleIdLocalePair, messageFormatProvider.getBundleBasenameLocales().get(liveBundle));
-        assertEquals(1, messageFormatProvider.getCachedBundleMessageFormats().size());
+        assertEquals(2, messageFormatProvider.getCachedBundleMessageFormats().size());
         messageFormats = messageFormatProvider.getCachedBundleMessageFormats().get(liveBundle);
         // We didn't pass arguments for 'greeting.hello', so it is not parsed as MessageFormat.
         assertEquals(1, messageFormats.size());
@@ -167,11 +174,11 @@ public class HstRepositoryResourceBundleMessageSourceTest {
         assertEquals("Hello, World!", messageSource.getMessage("greeting.hello", null, Locale.ENGLISH));
         assertEquals("Hello, John!", messageSource.getMessage("greeting.hello.name", new Object [] { "John" }, Locale.ENGLISH));
 
-        assertEquals(1, messageFormatProvider.getBasenameLocaleBundles().size());
+        assertEquals(2, messageFormatProvider.getBasenameLocaleBundles().size());
         assertEquals(liveBundle, messageFormatProvider.getBasenameLocaleBundles().get(bundleIdLocalePair));
-        assertEquals(1, messageFormatProvider.getBundleBasenameLocales().size());
+        assertEquals(2, messageFormatProvider.getBundleBasenameLocales().size());
         assertEquals(bundleIdLocalePair, messageFormatProvider.getBundleBasenameLocales().get(liveBundle));
-        assertEquals(1, messageFormatProvider.getCachedBundleMessageFormats().size());
+        assertEquals(2, messageFormatProvider.getCachedBundleMessageFormats().size());
         messageFormats = messageFormatProvider.getCachedBundleMessageFormats().get(liveBundle);
         // We didn't pass arguments for 'greeting.hello', so it is not parsed as MessageFormat.
         assertEquals(1, messageFormats.size());
@@ -192,7 +199,7 @@ public class HstRepositoryResourceBundleMessageSourceTest {
         assertEquals("Hello, John! Are you really cool?", messageSource.getMessage("greeting.hello.name", new Object [] { "John" }, Locale.ENGLISH));
 
         KeyValue<String, Locale> defaultBundleIdLocalePair = new DefaultKeyValue<String, Locale>("", Locale.ENGLISH);
-        KeyValue<String, Locale> bundleIdLocalePair = new DefaultKeyValue<String, Locale>(BUNDLE_ID, Locale.ENGLISH);
+        KeyValue<String, Locale> bundleIdLocalePair = new DefaultKeyValue<String, Locale>(REPOSITORY_BUNDLE_ID, Locale.ENGLISH);
 
         assertEquals(2, messageFormatProvider.getBasenameLocaleBundles().size());
         assertEquals(localizationContextBundle, messageFormatProvider.getBasenameLocaleBundles().get(defaultBundleIdLocalePair));
@@ -301,7 +308,7 @@ public class HstRepositoryResourceBundleMessageSourceTest {
         assertEquals("Hello, World!", messageSource.getMessage("greeting.hello", null, Locale.ENGLISH));
         assertEquals("Hello, John!", messageSource.getMessage("greeting.hello.name", new Object [] { "John" }, Locale.ENGLISH));
 
-        KeyValue<String, Locale> bundleIdLocalePair = new DefaultKeyValue<String, Locale>(BUNDLE_ID, Locale.ENGLISH);
+        KeyValue<String, Locale> bundleIdLocalePair = new DefaultKeyValue<String, Locale>(REPOSITORY_BUNDLE_ID, Locale.ENGLISH);
 
         // While localizationContextBundle is still in cache, the message formats are cached for liveBundle..
         assertEquals(1, messageFormatProvider.getBasenameLocaleBundles().size());
@@ -333,7 +340,7 @@ public class HstRepositoryResourceBundleMessageSourceTest {
         assertEquals("Hello, John! Are you really cool?", messageSource.getMessage("greeting.hello.name", new Object [] { "John" }, Locale.ENGLISH));
 
         KeyValue<String, Locale> defaultBundleIdLocalePair = new DefaultKeyValue<String, Locale>("", Locale.ENGLISH);
-        KeyValue<String, Locale> bundleIdLocalePair = new DefaultKeyValue<String, Locale>(BUNDLE_ID, Locale.ENGLISH);
+        KeyValue<String, Locale> bundleIdLocalePair = new DefaultKeyValue<String, Locale>(REPOSITORY_BUNDLE_ID, Locale.ENGLISH);
 
         assertEquals(2, messageFormatProvider.getBasenameLocaleBundles().size());
         assertEquals(localizationContextBundle, messageFormatProvider.getBasenameLocaleBundles().get(defaultBundleIdLocalePair));
@@ -363,10 +370,10 @@ public class HstRepositoryResourceBundleMessageSourceTest {
         liveBundle = new SimpleListResourceBundle(bundleContent);
         previewBundle = new SimpleListResourceBundle(bundleContent);
 
-        final DefaultMutableResourceBundleFamily bundleFamily = new DefaultMutableResourceBundleFamily(BUNDLE_ID);
+        final DefaultMutableResourceBundleFamily bundleFamily = new DefaultMutableResourceBundleFamily(REPOSITORY_BUNDLE_ID);
         bundleFamily.setDefaultBundle(liveBundle);
         bundleFamily.setDefaultBundleForPreview(previewBundle);
-        registry.registerBundleFamily(BUNDLE_ID, bundleFamily);
+        registry.registerBundleFamily(REPOSITORY_BUNDLE_ID, bundleFamily);
 
         assertEquals("Hello, Wooooooorld!", messageSource.getMessage("greeting.hello", null, Locale.ENGLISH));
         assertEquals("Hello, John! Are you sure you are really cool?", messageSource.getMessage("greeting.hello.name", new Object [] { "John" }, Locale.ENGLISH));
@@ -387,5 +394,30 @@ public class HstRepositoryResourceBundleMessageSourceTest {
         assertEquals(0, messageFormatProvider.getBasenameLocaleBundlesForPreview().size());
         assertEquals(0, messageFormatProvider.getBundleBasenameLocalesForPreview().size());
         assertEquals(0, messageFormatProvider.getCachedBundleMessageFormatsForPreview().size());
+    }
+
+    @Test
+    public void testDelegatingMessageSource() throws Exception {
+        DelegatingMessageSource delegatingMessageSource = new DelegatingMessageSource();
+        delegatingMessageSource.setParentMessageSource(messageSource);
+
+        // This is done in LocalizationValve of HST-2 Container.
+        Config.set(request, Config.FMT_LOCALIZATION_CONTEXT, new LocalizationContext(localizationContextBundle));
+
+        // Let's change the default resource bundle localization context on the fly.
+        Map<String, String> defaultBundleContent = new HashMap<String, String>(bundleContent);
+        defaultBundleContent.put("greeting.hello.name", "Hello, {0}! Are you really cool?");
+        localizationContextBundle = new SimpleListResourceBundle(defaultBundleContent);
+        Config.set(request, Config.FMT_LOCALIZATION_CONTEXT, new LocalizationContext(localizationContextBundle));
+
+        assertEquals("Hello, World!", delegatingMessageSource.getMessage("file.greeting.hello", null, Locale.ENGLISH));
+        assertEquals("Hello, World!", delegatingMessageSource.getMessage("file.greeting.hello", null, null, Locale.ENGLISH));
+        assertEquals("Hello, John!", delegatingMessageSource.getMessage("file.greeting.hello.name", new Object [] { "John" }, Locale.ENGLISH));
+        assertEquals("Hello, John!", delegatingMessageSource.getMessage("file.greeting.hello.name", new Object [] { "John" }, null, Locale.ENGLISH));
+
+        assertEquals("Hello, World!", delegatingMessageSource.getMessage("greeting.hello", null, Locale.ENGLISH));
+        assertEquals("Hello, World!", delegatingMessageSource.getMessage("greeting.hello", null, null, Locale.ENGLISH));
+        assertEquals("Hello, John! Are you really cool?", delegatingMessageSource.getMessage("greeting.hello.name", new Object [] { "John" }, Locale.ENGLISH));
+        assertEquals("Hello, John! Are you really cool?", delegatingMessageSource.getMessage("greeting.hello.name", new Object [] { "John" }, null, Locale.ENGLISH));
     }
 }
