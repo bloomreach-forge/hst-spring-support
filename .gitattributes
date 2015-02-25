@@ -3,6 +3,7 @@
 src/main/java/org/onehippo/forge/hst/spring/support/CachingRepositoryResourceBundleMessageFormatProvider.java -text svneol=unset#text/plain
 src/main/java/org/onehippo/forge/hst/spring/support/HstRepositoryResourceBundleMessageSource.java -text svneol=unset#text/plain
 src/main/java/org/onehippo/forge/hst/spring/support/RepositoryResourceBundleMessageFormatProvider.java -text svneol=unset#text/plain
+src/main/java/org/onehippo/forge/hst/spring/support/util/HstLocalizationUtils.java -text svneol=unset#text/plain
 src/site/checkstyle.xml -text svneol=unset#application/xml
 src/site/resources/highlight-source-elements.js -text
 src/site/resources/jquery-1.7.2.min.js -text

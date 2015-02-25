@@ -126,13 +126,13 @@ public class CachingRepositoryResourceBundleMessageFormatProvider extends Messag
      */
     @Override
     public MessageFormat getMessageFormat(ResourceBundle bundle, String code, Locale locale) {
-        Map<ResourceBundle, Map<String, Map<Locale, MessageFormat>>> contextCachedBundleMessageFormats =
-                cachedBundleMessageFormats;
+        Map<ResourceBundle, Map<String, Map<Locale, MessageFormat>>> contextCachedBundleMessageFormats = cachedBundleMessageFormats;
         Map<ResourceBundle, KeyValue<String, Locale>> contextBundleBasenameLocales = bundleBasenameLocales;
 
         final HstRequestContext requestContext = RequestContextProvider.get();
+        final boolean preview = requestContext != null && requestContext.isPreview();
 
-        if (requestContext != null && requestContext.isPreview()) {
+        if (preview) {
             contextCachedBundleMessageFormats = cachedBundleMessageFormatsForPreview;
             contextBundleBasenameLocales = bundleBasenameLocalesForPreview;
         }

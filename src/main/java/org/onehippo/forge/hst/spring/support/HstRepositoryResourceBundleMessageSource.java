@@ -27,6 +27,8 @@ import org.hippoecm.hst.container.RequestContextProvider;
 import org.hippoecm.hst.core.request.HstRequestContext;
 import org.hippoecm.hst.resourcebundle.ResourceBundleRegistry;
 import org.hippoecm.hst.site.HstServices;
+import org.onehippo.forge.hst.spring.support.util.HstLocalizationUtils;
+import org.springframework.context.support.MessageSourceResourceBundle;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
 /**
@@ -117,6 +119,23 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
         this.resourceBundleMessageFormatProvider = resourceBundleMessageFormatProvider;
     }
 
+    @Override
+    protected String resolveCodeWithoutArguments(String code, Locale locale) {
+        if (isLocalizationContextResourceBundleEnabled()) {
+            ResourceBundle defaultResourceBundle = findDefaultResourceBundle();
+
+            if (defaultResourceBundle != null) {
+                String message = getStringOrNull(defaultResourceBundle, code);
+
+                if (message != null) {
+                    return message;
+                }
+            }
+        }
+
+        return super.resolveCodeWithoutArguments(code, locale);
+    }
+
     /**
      * {@inheritDoc}
      * <p></p>
@@ -127,29 +146,13 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
     @Override
     protected MessageFormat resolveCode(String code, Locale locale) {
         if (isLocalizationContextResourceBundleEnabled()) {
-            HstRequestContext requestContext = RequestContextProvider.get();
-            boolean preview = (requestContext != null && requestContext.isPreview());
+            ResourceBundle defaultResourceBundle = findDefaultResourceBundle();
 
-            if (requestContext != null) {
-                final LocalizationContext localizationContext = (LocalizationContext) Config.get(requestContext.getServletRequest(), Config.FMT_LOCALIZATION_CONTEXT);
+            if (defaultResourceBundle != null) {
+                MessageFormat messageFormat = getMessageFormatFromDefaultResourceBundle(defaultResourceBundle, code, locale);
 
-                if (localizationContext != null) {
-                    final ResourceBundle defaultResourceBundle = localizationContext.getResourceBundle();
-
-                    if (defaultResourceBundle != null) {
-                        // Use empty string basename for the default localization context resource bundle.
-                        if (preview) {
-                            resourceBundleMessageFormatProvider.registerPreviewBundle("", locale, defaultResourceBundle);
-                        } else {
-                            resourceBundleMessageFormatProvider.registerBundle("", locale, defaultResourceBundle);
-                        }
-
-                        MessageFormat messageFormat = getMessageFormat(defaultResourceBundle, code, locale);
-
-                        if (messageFormat != null) {
-                            return messageFormat;
-                        }
-                    }
+                if (messageFormat != null) {
+                    return messageFormat;
                 }
             }
         }
@@ -172,7 +175,7 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
 
             if (resourceBundleRegistry != null) {
                 final HstRequestContext requestContext = RequestContextProvider.get();
-                boolean preview = (requestContext != null && requestContext.isPreview());
+                final boolean preview = requestContext != null && requestContext.isPreview();
                 ResourceBundle bundle = null;
 
                 if (locale == null) {
@@ -210,6 +213,64 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
         }
 
         return super.getMessageFormat(bundle, code, locale);
+    }
+
+    protected MessageFormat getMessageFormatFromDefaultResourceBundle(ResourceBundle defaultResourceBundle, String code, Locale locale) {
+        HstRequestContext requestContext = RequestContextProvider.get();
+        final boolean preview = requestContext != null && requestContext.isPreview();
+
+        if (defaultResourceBundle != null) {
+            // Use empty string basename for the default localization context resource bundle.
+            if (preview) {
+                resourceBundleMessageFormatProvider.registerPreviewBundle("", locale, defaultResourceBundle);
+            } else {
+                resourceBundleMessageFormatProvider.registerBundle("", locale, defaultResourceBundle);
+            }
+
+            return getMessageFormat(defaultResourceBundle, code, locale);
+        }
+
+        return null;
+    }
+
+    protected ResourceBundle findDefaultResourceBundle() {
+        HstRequestContext requestContext = RequestContextProvider.get();
+
+        if (requestContext != null) {
+            final LocalizationContext localizationContext = (LocalizationContext) Config.get(requestContext.getServletRequest(), Config.FMT_LOCALIZATION_CONTEXT);
+
+            if (localizationContext != null) {
+                ResourceBundle defaultResourceBundle = localizationContext.getResourceBundle();
+
+                if (defaultResourceBundle != null) {
+                    if (defaultResourceBundle instanceof MessageSourceResourceBundle) {
+                        // JSTL LocalizationContext has been modified by Spring Framework JstlView / JstUtils.
+                        // Because MessageSourceResourceBundle is just a wrapper of this MessageSource implementation,
+                        // it will cause infinte self-recursive call if you use it.
+                        // So, we will need to find the LocalizationContext set by HST-2 Container.
+                        defaultResourceBundle = HstLocalizationUtils.getCurrentDefaultResourceBundle();
+
+                        if (defaultResourceBundle != null) {
+                            return defaultResourceBundle;
+                        }
+                    } else {
+                        return defaultResourceBundle;
+                    }
+                }
+
+                return null;
+            }
+        }
+
+        return null;
+    }
+
+    private String getStringOrNull(ResourceBundle bundle, String key) {
+        try {
+            return bundle.getString(key);
+        } catch (MissingResourceException ex) {
+            return null;
+        }
     }
 
 }
