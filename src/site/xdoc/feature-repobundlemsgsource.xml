@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+    Copyright 2015 Hippo Licensed under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License. You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+    applicable law or agreed to in writing, software distributed under
+    the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
+    OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and
+    limitations under the License.
+  --><!DOCTYPE document PUBLIC "-//Apache Software Foundation//DTD XDOC 1.0//EN"
+  "http://maven.apache.org/dtd/xdoc_1_0.dtd">
+<document>
+  <properties>
+    <title>HST-2 Repository ResourceBundle MessageSource</title>
+  </properties>
+  <body>
+    <section name="HST-2 Repository ResourceBundle MessageSource">
+      <subsection name="Configuration">
+        <p>
+          If you want to take advantage of
+          <a href="http://www.onehippo.org/library/concepts/translations/hst-2-dynamic-resource-bundles-support.html">HST-2 Repository Dynamic ResourceBundle</a>
+          as <a href="http://docs.spring.io/spring/docs/3.2.13.RELEASE/spring-framework-reference/htmlsingle/#context-functionality-messagesource">MessageSource</a>
+          in your Spring Framework application,
+          then you should configure the following MessageSource bean instead of the default
+          <a href="http://docs.spring.io/spring/docs/3.2.13.RELEASE/javadoc-api/org/springframework/context/support/ResourceBundleMessageSource.html">ResourceBundleMessageSource</a>.
+        </p>
+        <div class="brush: xml">
+        <source><![CDATA[
+<beans>
+
+  <!-- SNIP -->
+
+  <!-- Set HstRepositoryResourceBundleMessageSource to be able to use HST-2 Repository Dynamic Resource Bundles. -->
+  <bean id="messageSource" class="org.onehippo.forge.hst.spring.support.HstRepositoryResourceBundleMessageSource">
+    <!--
+      You don't have to specify hard-coded 'basenames' property here,
+      but you can still add some standard Java resource bundle basenames additionally.
+      So, in this example, if a resource key is not found from the bundle(s) configured in
+      HST-2 configuration (hst:virtualhosts, hst:virtualhost or hst:mount), then it may fall
+      back to the specified Java standard resource bundle (e.g, 'classpath:org/hippoecm/hst/demo/spring/webmvc/exceptions_en.properties').
+    -->
+    <property name="basenames">
+      <list>
+        <value>org.hippoecm.hst.demo.spring.webmvc.exceptions</value>
+      </list>
+    </property>
+  </bean>
+
+  <!-- SNIP -->
+
+</beans>
+        ]]></source>
+        </div>
+        <p>
+          See the Javadoc of <a href="apidocs/org/onehippo/forge/hst/spring/support/HstRepositoryResourceBundleMessageSource.html">HstRepositoryResourceBundleMessageSource</a> for more detail.
+        </p>
+      </subsection>
+    </section>
+  </body>
+</document>

@@ -23,7 +23,7 @@
         </p>
         <p>
           For example, HST-2 supports 
-          <a href="http://www.onehippo.org/library/concepts/translations/hst-2-dynamic-resource-bundles-support.html">Dynamic ResourceBundle</a>
+          <a href="http://www.onehippo.org/library/concepts/translations/hst-2-dynamic-resource-bundles-support.html">Repository Dynamic ResourceBundle</a>
           stored in the repository.
           However, <a href="http://docs.spring.io/spring/docs/3.2.13.RELEASE/spring-framework-reference/htmlsingle/#context-functionality-messagesource">Spring Framework Internationalization Support with MessageSource</a>
           is unaware of how to retrieve HST-2 Dynamic ResourceBundles using HST-2 API.

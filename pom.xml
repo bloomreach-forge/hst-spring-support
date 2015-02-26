@@ -300,7 +300,7 @@
           <xmlOutput>true</xmlOutput>
           <xdocsOutput>true</xdocsOutput>
           <xmlOutputDirectory>target/site</xmlOutputDirectory>
-          <onlyAnalyze>org.onehippo.forge.camel.component.hippo.*</onlyAnalyze>
+          <onlyAnalyze>org.onehippo.forge.hst.spring.support.*</onlyAnalyze>
           <effort>Max</effort>
           <threshold>High</threshold>
           <relaxed>true</relaxed>

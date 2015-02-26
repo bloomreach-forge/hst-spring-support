@@ -54,8 +54,9 @@ src/site/resources/sh/styles/shThemeMidnight.css -text
 src/site/resources/sh/styles/shThemeRDark.css -text
 src/site/site.xml -text svneol=unset#application/xml
 src/site/xdoc/build-from-source.xml -text svneol=unset#text/plain
-src/site/xdoc/hst-resource-bundles.xml -text svneol=unset#text/plain
+src/site/xdoc/feature-repobundlemsgsource.xml -text svneol=unset#text/plain
 src/site/xdoc/index.xml -text svneol=unset#application/xml
+src/site/xdoc/install.xml -text svneol=unset#text/plain
 src/site/xdoc/release-notes.xml -text svneol=unset#text/plain
 src/test/java/org/onehippo/forge/hst/spring/support/HstRepositoryResourceBundleMessageSourceTest.java -text svneol=unset#text/plain
 src/test/resources/org/onehippo/forge/hst/spring/support/MessageResources.properties -text svneol=unset#text/plain
