@@ -21,7 +21,7 @@
   <description>HST - Spring Framework Support</description>
   <groupId>org.onehippo.forge.hst-spring-support</groupId>
   <artifactId>hst-spring-support</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.0</version>
   <url>http://hst-spring-sup.forge.onehippo.org/</url>
 
   <properties>
@@ -87,9 +87,9 @@
   </developers>
 
   <scm>
-    <connection>scm:svn:https://forge.onehippo.org/svn/hst-spring-sup/trunk</connection>
-    <developerConnection>scm:svn:https://forge.onehippo.org/svn/hst-spring-sup/trunk</developerConnection>
-    <url>https://forge.onehippo.org/svn/hst-spring-sup/trunk</url>
+    <connection>scm:svn:https://forge.onehippo.org/svn/hst-spring-sup/tags/hst-spring-support-0.1.0</connection>
+    <developerConnection>scm:svn:https://forge.onehippo.org/svn/hst-spring-sup/tags/hst-spring-support-0.1.0</developerConnection>
+    <url>https://forge.onehippo.org/svn/hst-spring-sup/tags/hst-spring-support-0.1.0</url>
   </scm>
 
   <issueManagement>
