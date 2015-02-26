@@ -119,6 +119,13 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
         this.resourceBundleMessageFormatProvider = resourceBundleMessageFormatProvider;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p></p>
+     * If {@link #isLocalizationContextResourceBundleEnabled()} returns true,
+     * then it tries to find the default resource bundle from {@link LocalizationContext} first.
+     * Otherwise or if not found, it proceeds with the default behavior.
+     */
     @Override
     protected String resolveCodeWithoutArguments(String code, Locale locale) {
         if (isLocalizationContextResourceBundleEnabled()) {
@@ -215,6 +222,16 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
         return super.getMessageFormat(bundle, code, locale);
     }
 
+    /**
+     * Invokes {@link RepositoryResourceBundleMessageFormatProvider#registerBundle(String, Locale, ResourceBundle)}
+     * or {@link RepositoryResourceBundleMessageFormatProvider#registerPreviewBundle(String, Locale, ResourceBundle)}
+     * depending on the current request context in order to register the bundle or remove any existing outdated bundle.
+     * And, it invokes {@link #getMessageFormat(ResourceBundle, String, Locale)} to return a MessageFormat.
+     * @param defaultResourceBundle
+     * @param code
+     * @param locale
+     * @return
+     */
     protected MessageFormat getMessageFormatFromDefaultResourceBundle(ResourceBundle defaultResourceBundle, String code, Locale locale) {
         HstRequestContext requestContext = RequestContextProvider.get();
         final boolean preview = requestContext != null && requestContext.isPreview();
@@ -233,6 +250,15 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
         return null;
     }
 
+    /**
+     * Finds the default <code>LocalizationContext</code>'s <code>ResourceBundle</code> set by HST-2 Container in the frontend pipeline.
+     * <p>
+     * It tries to find it from the JSTL <code>LocalizationContext</code>. However, <code>JstlView</code> (and <code>JstlUtils</code>) of Spring Framework
+     * may replace the <code>LocalizationContext</code> by its <code>MessageSourceResourceBundle</code>.
+     * In that case, it tries to resolve the default resource bundle(s) configured in HST-2 configurations again.
+     * </p>
+     * @return
+     */
     protected ResourceBundle findDefaultResourceBundle() {
         HstRequestContext requestContext = RequestContextProvider.get();
 

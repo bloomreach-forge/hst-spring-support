@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * HstLocalizationUtils.
+ * HST-2 Localization related utilities.
  */
 public class HstLocalizationUtils {
 
@@ -51,6 +51,14 @@ public class HstLocalizationUtils {
     private HstLocalizationUtils() {
     }
 
+    /**
+     * Resolve and return the default resource bundle(s) configured in HST-2 configurations.
+     * <p>
+     * For performance reason, the resolved default resource bundle is stored in a thread local variable
+     * not to resolve again in the same request processing thread.
+     * </p>
+     * @return
+     */
     public static ResourceBundle getCurrentDefaultResourceBundle() {
         ResourceBundle defaultResourceBundle = tlHstDefaultResourceBundle.get();
 

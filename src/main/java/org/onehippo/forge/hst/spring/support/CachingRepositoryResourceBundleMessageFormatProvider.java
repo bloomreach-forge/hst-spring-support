@@ -29,7 +29,9 @@ import org.hippoecm.hst.util.KeyValue;
 import org.springframework.context.support.MessageSourceSupport;
 
 /**
- * CachingRepositoryResourceBundleMessageFormatProvider.
+ * {@link RepositoryResourceBundleMessageFormatProvider} implementation providing
+ * <code>MessageFormat</code> caching per <code>ResourceBundle</code>, resource key and locale.
+ * Also, it maintain the cache separately based on preview/live request context.
  */
 public class CachingRepositoryResourceBundleMessageFormatProvider extends MessageSourceSupport implements RepositoryResourceBundleMessageFormatProvider {
 
