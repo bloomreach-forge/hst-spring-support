@@ -38,7 +38,7 @@
       You don't have to specify hard-coded 'basenames' property here,
       but you can still add some standard Java resource bundle basenames additionally.
       So, in this example, if a resource key is not found from the bundle(s) configured in
-      HST-2 configuration (hst:virtualhosts, hst:virtualhost or hst:mount), then it may fall
+      HST-2 configuration (hst:sitemapitem, hst:mount, hst:virtualhost or hst:virtualhosts as ordered by precedence), then it may fall
       back to the specified Java standard resource bundle (e.g, 'classpath:org/hippoecm/hst/demo/spring/webmvc/exceptions_en.properties').
     -->
     <property name="basenames">
