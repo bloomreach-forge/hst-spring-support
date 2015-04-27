@@ -36,7 +36,7 @@
       <subsection name="0.1.1">
         <ul>
           <li>
-            Supporting HST-2 Page Not Found Exception Handler Integration. Thanks to Rick Slot!
+            [<a href="https://issues.onehippo.com/browse/HIPPLUG-1036">HIPPLUG-1036</a>] Supporting HST-2 Page Not Found Exception Handler Integration. Thanks to Rick Slot!
           </li>
         </ul>
       </subsection>
