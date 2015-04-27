@@ -54,6 +54,9 @@
 </beans>
         ]]></source>
         </div>
+        <p>
+          See the Javadoc of <a href="apidocs/org/onehippo/forge/hst/spring/support/web/HstBridgeHandlerExceptionsResolver.html">HstBridgeHandlerExceptionsResolver</a> for more detail.
+        </p>
       </subsection>
     </section>
   </body>
