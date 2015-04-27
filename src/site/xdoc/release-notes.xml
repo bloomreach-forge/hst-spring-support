@@ -33,9 +33,15 @@
       </table>
     </section>
     <section name="Release Notes">
+      <subsection name="0.1.1">
+        <ul>
+          <li>Supporting HST-2 Page Not Found Exception Handler Integration</li>
+        </ul>
+      </subsection>
       <subsection name="0.1.0">
         <ul>
           <li>Initial release</li>
+          <li>Supporting HST-2 Repository ResourceBundle MessageSource</li>
         </ul>
       </subsection>
     </section>
