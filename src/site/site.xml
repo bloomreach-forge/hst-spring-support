@@ -49,6 +49,7 @@
 
     <menu name="Features">
       <item name="HST-2 Repository ResourceBundle MessageSource" href="feature-repobundlemsgsource.html" />
+      <item name="HST-2 Page Not Found Exception Handler Integration" href="feature-pagenotfound.html" />
     </menu>
 
     <menu ref="reports" />

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+    Copyright 2015 Hippo Licensed under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License. You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+    applicable law or agreed to in writing, software distributed under
+    the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
+    OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and
+    limitations under the License.
+  --><!DOCTYPE document PUBLIC "-//Apache Software Foundation//DTD XDOC 1.0//EN"
+  "http://maven.apache.org/dtd/xdoc_1_0.dtd">
+<document>
+  <properties>
+    <title>HST-2 Page Not Found Exception Handler Integration</title>
+  </properties>
+  <body>
+    <section name="HST-2 Page Not Found Exception Handler Integration">
+      <subsection name="Configuration">
+        <p>
+          If you want to forward the request to the 'page-not-found' sitemap item path in your controller,
+          then you may configure
+          <a href="apidocs/org/onehippo/forge/hst/spring/support/web/HstBridgeHandlerExceptionsResolver.html">HstBridgeHandlerExceptionsResolver</a> bean
+          with setting the 'page-not-found' sitemap item reference ID
+          and you can make your controller throw
+          <a href="apidocs/org/onehippo/forge/hst/spring/support/web/HstPageNotFoundException.html">HstPageNotFoundException</a>
+          in a method (which is invoked in <strong>doBeforeRender</strong> phase).
+        </p>
+        <p>
+          Then the
+          <a href="apidocs/org/onehippo/forge/hst/spring/support/web/HstBridgeHandlerExceptionsResolver.html">HstBridgeHandlerExceptionsResolver</a>
+          finds the path info of the 'page-not-found' sitemap item
+          configured in HST Site configuration in the repository and forward the request to the path info.
+        </p>
+        <p>
+          For example, you may configure the global
+          <a href="http://docs.spring.io/spring/docs/3.2.13.RELEASE/javadoc-api/org/springframework/web/servlet/HandlerExceptionResolver.html">HandlerExceptionResolver</a>
+          bean like the following example:
+        </p>
+        <div class="brush: xml">
+        <source><![CDATA[
+<beans>
+
+  <!-- SNIP -->
+
+  <!-- handlerExceptionResolver setting to forward to 'notFound' sitemap item when HstPageNotFoundException occurs. -->
+  <bean id="handlerExceptionResolver" class="org.onehippo.forge.hst.spring.support.web.HstBridgeHandlerExceptionsResolver">
+    <property name="pageNotFoundRefId" value="notFound" />
+  </bean>
+
+  <!-- SNIP -->
+
+</beans>
+        ]]></source>
+        </div>
+      </subsection>
+    </section>
+  </body>
+</document>

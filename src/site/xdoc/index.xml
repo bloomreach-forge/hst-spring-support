@@ -31,6 +31,12 @@
           to be able to use HST-2 Dyanmic ResourceBundles as well as the default Java ResourceBundles provided by Spring Framework.
         </p>
         <p>
+          Also, this project supports a
+          <a href="http://docs.spring.io/spring/docs/3.2.13.RELEASE/javadoc-api/org/springframework/web/servlet/HandlerExceptionResolver.html">HandlerExceptionResolver</a>
+          which can handle HST page not found exception to forward the request
+          to the specified HST 'page-not-found' sitemap item path.
+        </p>
+        <p>
           Whenever there's any gap found between HST-2 Framework and Spring Framework,
           this project will keep providing proper solutions to make seamless integration between two.
         </p>
