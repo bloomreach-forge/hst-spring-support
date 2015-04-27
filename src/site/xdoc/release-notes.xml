@@ -35,7 +35,9 @@
     <section name="Release Notes">
       <subsection name="0.1.1">
         <ul>
-          <li>Supporting HST-2 Page Not Found Exception Handler Integration</li>
+          <li>
+            Supporting HST-2 Page Not Found Exception Handler Integration. Thanks to Rick Slot!
+          </li>
         </ul>
       </subsection>
       <subsection name="0.1.0">
