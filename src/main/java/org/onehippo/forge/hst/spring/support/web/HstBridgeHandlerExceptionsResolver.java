@@ -71,8 +71,9 @@ public class HstBridgeHandlerExceptionsResolver implements HandlerExceptionResol
      * If the {@code exception} is instance of {@link HstPageNotFoundException},
      * then it tries to resolve the sitemap item path of the configured 'page not found' sitemap item
      * and forward request to the 'page not found' sitemap item path info.
-     * <p></p>
+     * <p>
      * If the 'page not found' sitemap item is not found, then it simply returns an empty {@link ModelAndView}.
+     * </p>
      * {@inheritDoc}
      */
     @Override
@@ -119,6 +120,8 @@ public class HstBridgeHandlerExceptionsResolver implements HandlerExceptionResol
 
     /**
      * Finds path info of the 'page not found' sitemap item.
+     *
+     * @return page not found (404) path info
      */
     protected String resolvePageNotFoundPathInfo() {
         String pathInfo = null;

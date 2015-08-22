@@ -175,7 +175,7 @@ public class CachingRepositoryResourceBundleMessageFormatProvider extends Messag
 
     /**
      * Test purpose getter.
-     * @return
+     * @return cached bundle message formats
      */
     protected Map<ResourceBundle, Map<String, Map<Locale, MessageFormat>>> getCachedBundleMessageFormats() {
         return cachedBundleMessageFormats;
@@ -183,7 +183,7 @@ public class CachingRepositoryResourceBundleMessageFormatProvider extends Messag
 
     /**
      * Test purpose getter.
-     * @return
+     * @return bundle basename locales
      */
     protected Map<ResourceBundle, KeyValue<String, Locale>> getBundleBasenameLocales() {
         return bundleBasenameLocales;
@@ -191,7 +191,7 @@ public class CachingRepositoryResourceBundleMessageFormatProvider extends Messag
 
     /**
      * Test purpose getter.
-     * @return
+     * @return basename locale bundles
      */
     protected Map<KeyValue<String, Locale>, ResourceBundle> getBasenameLocaleBundles() {
         return basenameLocaleBundles;
@@ -199,7 +199,7 @@ public class CachingRepositoryResourceBundleMessageFormatProvider extends Messag
 
     /**
      * Test purpose getter.
-     * @return
+     * @return cached bundle message formats for preview
      */
     protected Map<ResourceBundle, Map<String, Map<Locale, MessageFormat>>> getCachedBundleMessageFormatsForPreview() {
         return cachedBundleMessageFormatsForPreview;
@@ -207,7 +207,7 @@ public class CachingRepositoryResourceBundleMessageFormatProvider extends Messag
 
     /**
      * Test purpose getter.
-     * @return
+     * @return bundle basename locales for preview
      */
     protected Map<ResourceBundle, KeyValue<String, Locale>> getBundleBasenameLocalesForPreview() {
         return bundleBasenameLocalesForPreview;
@@ -215,7 +215,7 @@ public class CachingRepositoryResourceBundleMessageFormatProvider extends Messag
 
     /**
      * Test purpose getter.
-     * @return
+     * @return basename locale bundles for preview
      */
     protected Map<KeyValue<String, Locale>, ResourceBundle> getBasenameLocaleBundlesForPreview() {
         return basenameLocaleBundlesForPreview;

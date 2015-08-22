@@ -34,7 +34,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 /**
  * {@link org.springframework.context.MessageSource} implementation that
  * accesses {@link Config#get(javax.servlet.ServletRequest, String)} to read the default
- * {@link LocalizationContext} which can be set by HST-2 Container (<code>LocalizationValve</code>).
+ * {@link LocalizationContext} which can be set by HST-2 Container ({@code LocalizationValve}).
  * (if {@link #isLocalizationContextResourceBundleEnabled()} returns true (by default))
  * to resolve {@link MessageFormat}.
  * If  falls back to the super class,
@@ -69,6 +69,8 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
     /**
      * Returns true if the default resource bundle should be found from {@link LocalizationContext}
      * by calling on {@link Config#get(javax.servlet.ServletRequest, String)}.
+     * @return true if the default resource bundle should be found from {@link LocalizationContext}
+     * by calling on {@link Config#get(javax.servlet.ServletRequest, String)}
      */
     public boolean isLocalizationContextResourceBundleEnabled() {
         return localizationContextResourceBundleEnabled;
@@ -77,6 +79,8 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
     /**
      * Sets the flag whether or not the default resource bundle should be found from {@link LocalizationContext}
      * by calling on {@link Config#get(javax.servlet.ServletRequest, String)}.
+     * @param localizationContextResourceBundleEnabled the flag whether or not the default resource bundle should be found from {@link LocalizationContext}
+     * by calling on {@link Config#get(javax.servlet.ServletRequest, String)}
      */
     public void setLocalizationContextResourceBundleEnabled(boolean localizationContextResourceBundleEnabled) {
         this.localizationContextResourceBundleEnabled = localizationContextResourceBundleEnabled;
@@ -85,7 +89,8 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
     /**
      * Returns true if the repository resource bundle documents should be looked up
      * in {@link #getResourceBundle(String, Locale)}.
-     * @return
+     * @return true if the repository resource bundle documents should be looked up
+     * in {@link #getResourceBundle(String, Locale)}
      */
     public boolean isRepositoryResourceBundleEnabled() {
         return repositoryResourceBundleEnabled;
@@ -94,7 +99,8 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
     /**
      * Sets the flag whether or not the repository resource bundle documents should be looked up
      * in {@link #getResourceBundle(String, Locale)}.
-     * @param repositoryResourceBundleEnabled
+     * @param repositoryResourceBundleEnabled the flag whether or not the repository resource bundle documents should be looked up
+     * in {@link #getResourceBundle(String, Locale)}
      */
     public void setRepositoryResourceBundleEnabled(boolean repositoryResourceBundleEnabled) {
         this.repositoryResourceBundleEnabled = repositoryResourceBundleEnabled;
@@ -103,7 +109,8 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
     /**
      * Returns {@link RepositoryResourceBundleMessageFormatProvider} internally used for
      * maintaining repository-based resource bundles and message formats from them.
-     * @return
+     * @return {@link RepositoryResourceBundleMessageFormatProvider} internally used for
+     * maintaining repository-based resource bundles and message formats from them
      */
     public RepositoryResourceBundleMessageFormatProvider getResourceBundleMessageFormatProvider() {
         return resourceBundleMessageFormatProvider;
@@ -112,7 +119,8 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
     /**
      * Sets {@link RepositoryResourceBundleMessageFormatProvider} internally to be used for
      * maintaining repository-based resource bundles and message formats from them.
-     * @param resourceBundleMessageFormatProvider
+     * @param resourceBundleMessageFormatProvider {@link RepositoryResourceBundleMessageFormatProvider} internally to be used for
+     * maintaining repository-based resource bundles and message formats from them
      */
     public void setResourceBundleMessageFormatProvider(
             RepositoryResourceBundleMessageFormatProvider resourceBundleMessageFormatProvider) {
@@ -121,10 +129,14 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
 
     /**
      * {@inheritDoc}
-     * <p></p>
+     *
      * If {@link #isLocalizationContextResourceBundleEnabled()} returns true,
      * then it tries to find the default resource bundle from {@link LocalizationContext} first.
      * Otherwise or if not found, it proceeds with the default behavior.
+     *
+     * @param code message code
+     * @param locale message locale
+     * @return message resolved by the code and locale
      */
     @Override
     protected String resolveCodeWithoutArguments(String code, Locale locale) {
@@ -145,10 +157,14 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
 
     /**
      * {@inheritDoc}
-     * <p></p>
+     *
      * If {@link #isLocalizationContextResourceBundleEnabled()} returns true,
      * then it tries to find the default resource bundle from {@link LocalizationContext} first.
      * Otherwise or if not found, it proceeds with the default behavior.
+     *
+     * @param code message code
+     * @param locale message locale
+     * @return message format resolved by code and locale
      */
     @Override
     protected MessageFormat resolveCode(String code, Locale locale) {
@@ -169,10 +185,14 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
 
     /**
      * {@inheritDoc}
-     * <p></p>
+     *
      * If {@link #isRepositoryResourceBundleEnabled()} returns true, then it first looks up
      * resource bundle from the repository.
      * Otherwise or if not found, it proceeds with the default behavior.
+     *
+     * @param basename resource bundle basename
+     * @param locale resource bundle locale
+     * @return resource bundle
      */
     @Override
     protected ResourceBundle getResourceBundle(String basename, Locale locale) {
@@ -209,6 +229,11 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
     /**
      * Return a MessageFormat for the given bundle and code,
      * fetching already generated MessageFormats from the cache.
+     *
+     * @param bundle resource bundle
+     * @param code message code
+     * @param locale message locale
+     * @return message format resolved
      */
     @Override
     protected MessageFormat getMessageFormat(ResourceBundle bundle, String code, Locale locale)
@@ -227,10 +252,11 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
      * or {@link RepositoryResourceBundleMessageFormatProvider#registerPreviewBundle(String, Locale, ResourceBundle)}
      * depending on the current request context in order to register the bundle or remove any existing outdated bundle.
      * And, it invokes {@link #getMessageFormat(ResourceBundle, String, Locale)} to return a MessageFormat.
-     * @param defaultResourceBundle
-     * @param code
-     * @param locale
-     * @return
+     *
+     * @param defaultResourceBundle default resource bundle
+     * @param code message code
+     * @param locale message locale
+     * @return message format resolved
      */
     protected MessageFormat getMessageFormatFromDefaultResourceBundle(ResourceBundle defaultResourceBundle, String code, Locale locale) {
         HstRequestContext requestContext = RequestContextProvider.get();
@@ -251,13 +277,13 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
     }
 
     /**
-     * Finds the default <code>LocalizationContext</code>'s <code>ResourceBundle</code> set by HST-2 Container in the frontend pipeline.
+     * Finds the default {@code LocalizationContext}'s {@code ResourceBundle} set by HST-2 Container in the frontend pipeline.
      * <p>
-     * It tries to find it from the JSTL <code>LocalizationContext</code>. However, <code>JstlView</code> (and <code>JstlUtils</code>) of Spring Framework
-     * may replace the <code>LocalizationContext</code> by its <code>MessageSourceResourceBundle</code>.
+     * It tries to find it from the JSTL {@code LocalizationContext}. However, {@code JstlView} (and {@code JstlUtils}) of Spring Framework
+     * may replace the {@code LocalizationContext} by its {@code MessageSourceResourceBundle}.
      * In that case, it tries to resolve the default resource bundle(s) configured in HST-2 configurations again.
      * </p>
-     * @return
+     * @return default resource bundle
      */
     protected ResourceBundle findDefaultResourceBundle() {
         HstRequestContext requestContext = RequestContextProvider.get();

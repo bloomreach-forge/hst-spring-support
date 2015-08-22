@@ -57,7 +57,7 @@ public class HstLocalizationUtils {
      * For performance reason, the resolved default resource bundle is stored in a thread local variable
      * not to resolve again in the same request processing thread.
      * </p>
-     * @return
+     * @return current default resource bundle
      */
     public static ResourceBundle getCurrentDefaultResourceBundle() {
         ResourceBundle defaultResourceBundle = tlHstDefaultResourceBundle.get();

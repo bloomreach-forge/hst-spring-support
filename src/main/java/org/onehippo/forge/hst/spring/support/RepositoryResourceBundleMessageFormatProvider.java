@@ -29,30 +29,30 @@ import java.util.ResourceBundle;
 public interface RepositoryResourceBundleMessageFormatProvider {
 
     /**
-     * Register the live <code>bundle</code> by the <code>basename</code> and <code>locale<code>
-     * in order to be able to determine that the <code>bundle</code> was originated from repository.
+     * Register the live {@code bundle} by the {@code basename} and {@code locale}
+     * in order to be able to determine that the {@code bundle} was originated from repository.
      * <p>
      * Note: Whenever retrieve a resource bundle from repository, this method should be invoked.
      *       Then this implementation should register it if not yet done or clear any outdated
-     *       cache associated with the <code>basename</code> and <code>locale</code> for a refreshed bundle.
+     *       cache associated with the {@code basename} and {@code locale} for a refreshed bundle.
      * </p>
-     * @param basename
-     * @param locale
-     * @param bundle
+     * @param basename resource bundle basename
+     * @param locale resource bundle locale
+     * @param bundle resource bundle
      */
     public void registerBundle(String basename, Locale locale, ResourceBundle bundle);
 
     /**
-     * Register the preview <code>bundle</code> by the <code>basename</code> and <code>locale<code>
-     * in order to be able to determine that the <code>bundle</code> was originated from repository.
+     * Register the preview {@code bundle} by the {@code basename} and {@code locale}
+     * in order to be able to determine that the {@code bundle} was originated from repository.
      * <p>
      * Note: Whenever retrieve a resource bundle from repository, this method should be invoked.
      *       Then this implementation should register it if not yet done or clear any outdated
-     *       cache associated with the <code>basename</code> and <code>locale</code> for a refreshed bundle.
+     *       cache associated with the {@code basename} and {@code locale} for a refreshed bundle.
      * </p>
-     * @param basename
-     * @param locale
-     * @param bundle
+     * @param basename resource bundle basename
+     * @param locale resource bundle locale
+     * @param bundle resource bundle
      */
     public void registerPreviewBundle(String basename, Locale locale, ResourceBundle bundle);
 
