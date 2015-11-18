@@ -23,16 +23,32 @@
             Plugin Version
           </th>
           <th>
+            Spring Framework Version
+          </th>
+          <th>
             Hippo CMS Release Version
           </th>
         </tr>
         <tr>
+          <td>1.1.x</td>
+          <td>4.x</td>
+          <td>10.0, 10.1</td>
+        </tr>
+        <tr>
           <td>0.1.x</td>
+          <td>3.2.x</td>
           <td>7.8, 7.9+</td>
         </tr>
       </table>
     </section>
     <section name="Release Notes">
+      <subsection name="1.1.0">
+        <ul>
+          <li>
+            Compatible with Spring Framework 4 and Hippo CMS 10.
+          </li>
+        </ul>
+      </subsection>
       <subsection name="0.1.1">
         <ul>
           <li>
