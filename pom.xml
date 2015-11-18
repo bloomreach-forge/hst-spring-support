@@ -88,9 +88,9 @@
   </developers>
 
   <scm>
-    <connection>scm:svn:https://forge.onehippo.org/svn/hst-spring-sup/trunk</connection>
-    <developerConnection>scm:svn:https://forge.onehippo.org/svn/hst-spring-sup/trunk</developerConnection>
-    <url>https://forge.onehippo.org/svn/hst-spring-sup/trunk</url>
+    <connection>scm:svn:https://forge.onehippo.org/svn/hst-spring-sup/branches/hst-spring-sup-0.1.x</connection>
+    <developerConnection>scm:svn:https://forge.onehippo.org/svn/hst-spring-sup/branches/hst-spring-sup-0.1.x</developerConnection>
+    <url>https://forge.onehippo.org/svn/hst-spring-sup/branches/hst-spring-sup-0.1.x</url>
   </scm>
 
   <issueManagement>
