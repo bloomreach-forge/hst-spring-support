@@ -42,6 +42,15 @@
       </table>
     </section>
     <section name="Release Notes">
+      <subsection name="1.1.1">
+        <ul>
+          <li>
+            Bug fix for the thread safety issue in ResourceBundle cache using ThreadLocal.
+            Replaced the ThreadLocal cache with a HstRequestContext attribute cache.
+            Thanks to Jasper Floor for finding the root cause.
+          </li>
+        </ul>
+      </subsection>
       <subsection name="1.1.0">
         <ul>
           <li>
