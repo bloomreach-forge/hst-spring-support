@@ -37,9 +37,9 @@ public class HstLocalizationUtils {
 
     private static Logger log = LoggerFactory.getLogger(HstLocalizationUtils.class);
 
-    private static ThreadLocal<ResourceBundle> tlHstDefaultResourceBundle = new ThreadLocal<ResourceBundle>();
+    static final String DEFAULT_RESOURCE_BUNDLE_ATTR = HstLocalizationUtils.class.getName() + ".defaultResourceBundle";
 
-    private static final Object [][] EMPTY_RESOURCE_BUNDLE_CONTENTS = new Object[0][2];
+    private static final Object[][] EMPTY_RESOURCE_BUNDLE_CONTENTS = new Object[0][2];
 
     private static final ResourceBundle EMPTY_RESOURCE_BUNDLE = new ListResourceBundle() {
         @Override
@@ -54,31 +54,41 @@ public class HstLocalizationUtils {
     /**
      * Resolve and return the default resource bundle(s) configured in HST-2 configurations.
      * <p>
-     * For performance reason, the resolved default resource bundle is stored in a thread local variable
-     * not to resolve again in the same request processing thread.
+     * For performance reason, the resolved default resource bundle is stored in HstRequestContext attribute
+     * not to resolve again in the same request processing cycle.
      * </p>
      * @return current default resource bundle
      */
     public static ResourceBundle getCurrentDefaultResourceBundle() {
-        ResourceBundle defaultResourceBundle = tlHstDefaultResourceBundle.get();
+        return getCurrentDefaultResourceBundle(null);
+    }
 
-        if (defaultResourceBundle != null) {
-            return defaultResourceBundle;
-        }
-
+    /**
+     * Resolve and return the default resource bundle(s) configured in HST-2 configurations.
+     * <p>
+     * For performance reason, the resolved default resource bundle is stored in HstRequestContext attribute
+     * not to resolve again in the same request processing cycle.
+     * </p>
+     * @param defaultBundleWhenNotFound default resource bundle to use when no bundle found.
+     * @return current default resource bundle
+     */
+    public static ResourceBundle getCurrentDefaultResourceBundle(final ResourceBundle defaultBundleWhenNotFound) {
         HstRequestContext requestContext = RequestContextProvider.get();
 
         if (requestContext == null) {
             return null;
         }
 
-        ResourceBundleRegistry resourceBundleRegistry =
-                HstServices.getComponentManager().getComponent(ResourceBundleRegistry.class.getName());
+        ResourceBundle defaultResourceBundle = (ResourceBundle) requestContext.getAttribute(DEFAULT_RESOURCE_BUNDLE_ATTR);
+
+        if (defaultResourceBundle != null) {
+            return defaultResourceBundle;
+        }
 
         List<ResourceBundle> bundles = new ArrayList<ResourceBundle>();
 
         if (requestContext.getResolvedMount() != null) {
-            String [] bundleIds = null;
+            String[] bundleIds = null;
 
             if (requestContext.getResolvedSiteMapItem() != null) {
                 bundleIds = requestContext.getResolvedSiteMapItem().getHstSiteMapItem().getResourceBundleIds();
@@ -87,21 +97,27 @@ public class HstLocalizationUtils {
             }
 
             Locale locale = requestContext.getPreferredLocale();
+            ResourceBundleRegistry resourceBundleRegistry = getResourceBundleRegistry();
             ResourceBundle bundle = null;
 
             for (String bundleId : bundleIds) {
                 try {
                     if (resourceBundleRegistry != null) {
                         if (locale == null) {
-                            bundle = (requestContext.isPreview() ? resourceBundleRegistry.getBundleForPreview(bundleId) : resourceBundleRegistry.getBundle(bundleId));
+                            bundle = (requestContext.isPreview() ? resourceBundleRegistry.getBundleForPreview(bundleId)
+                                    : resourceBundleRegistry.getBundle(bundleId));
                         } else {
-                            bundle = (requestContext.isPreview() ? resourceBundleRegistry.getBundleForPreview(bundleId, locale) : resourceBundleRegistry.getBundle(bundleId, locale));
+                            bundle = (requestContext.isPreview()
+                                    ? resourceBundleRegistry.getBundleForPreview(bundleId, locale)
+                                    : resourceBundleRegistry.getBundle(bundleId, locale));
                         }
                     } else {
                         if (locale == null) {
-                            bundle = ResourceBundle.getBundle(bundleId, Locale.getDefault(), Thread.currentThread().getContextClassLoader());
+                            bundle = ResourceBundle.getBundle(bundleId, Locale.getDefault(),
+                                    Thread.currentThread().getContextClassLoader());
                         } else {
-                            bundle = ResourceBundle.getBundle(bundleId, locale, Thread.currentThread().getContextClassLoader());
+                            bundle = ResourceBundle.getBundle(bundleId, locale,
+                                    Thread.currentThread().getContextClassLoader());
                         }
                     }
 
@@ -115,16 +131,24 @@ public class HstLocalizationUtils {
         }
 
         if (bundles.isEmpty()) {
-            defaultResourceBundle = EMPTY_RESOURCE_BUNDLE;
+            defaultResourceBundle = defaultBundleWhenNotFound != null ? defaultBundleWhenNotFound : EMPTY_RESOURCE_BUNDLE;
         } else if (bundles.size() == 1) {
             defaultResourceBundle = bundles.get(0);
         } else {
             defaultResourceBundle = new CompositeResourceBundle(bundles.toArray(new ResourceBundle[bundles.size()]));
         }
 
-        tlHstDefaultResourceBundle.set(defaultResourceBundle);
+        requestContext.setAttribute(DEFAULT_RESOURCE_BUNDLE_ATTR, defaultResourceBundle);
 
         return defaultResourceBundle;
+    }
+
+    private static ResourceBundleRegistry getResourceBundleRegistry() {
+        if (HstServices.getComponentManager() != null) {
+            return HstServices.getComponentManager().getComponent(ResourceBundleRegistry.class.getName());
+        }
+
+        return null;
     }
 
 }
