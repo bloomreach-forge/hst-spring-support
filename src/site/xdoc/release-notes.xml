@@ -43,6 +43,9 @@
     </section>
     <section name="Release Notes">
       <subsection name="1.1.1">
+        <p class="smallinfo">
+          Release Date: March 23, 2016
+        </p>
         <ul>
           <li>
             Bug fix for the thread safety issue in ResourceBundle cache using ThreadLocal.
@@ -52,6 +55,9 @@
         </ul>
       </subsection>
       <subsection name="1.1.0">
+        <p class="smallinfo">
+          Release Date: November 18, 2015
+        </p>
         <ul>
           <li>
             Compatible with Spring Framework 4 and Hippo CMS 10.
@@ -59,6 +65,9 @@
         </ul>
       </subsection>
       <subsection name="0.1.1">
+        <p class="smallinfo">
+          Release Date: April 27, 2015
+        </p>
         <ul>
           <li>
             [<a href="https://issues.onehippo.com/browse/HIPPLUG-1036">HIPPLUG-1036</a>] Supporting HST-2 Page Not Found Exception Handler Integration. Thanks to Rick Slot!
@@ -66,6 +75,9 @@
         </ul>
       </subsection>
       <subsection name="0.1.0">
+        <p class="smallinfo">
+          Release Date: February 26, 2015
+        </p>
         <ul>
           <li>Initial release</li>
           <li>Supporting HST-2 Repository ResourceBundle MessageSource</li>
