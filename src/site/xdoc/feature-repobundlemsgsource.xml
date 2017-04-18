@@ -21,10 +21,10 @@
         <p>
           If you want to take advantage of
           <a href="http://www.onehippo.org/library/concepts/translations/hst-2-dynamic-resource-bundles-support.html">HST-2 Repository Dynamic ResourceBundle</a>
-          as <a href="http://docs.spring.io/spring/docs/3.2.13.RELEASE/spring-framework-reference/htmlsingle/#context-functionality-messagesource">MessageSource</a>
+          as <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#context-functionality-messagesource">MessageSource</a>
           in your Spring Framework application,
           then you should configure the following MessageSource bean instead of the default
-          <a href="http://docs.spring.io/spring/docs/3.2.13.RELEASE/javadoc-api/org/springframework/context/support/ResourceBundleMessageSource.html">ResourceBundleMessageSource</a>.
+          <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/context/support/ResourceBundleMessageSource.html">ResourceBundleMessageSource</a>.
         </p>
         <div class="brush: xml">
         <source><![CDATA[

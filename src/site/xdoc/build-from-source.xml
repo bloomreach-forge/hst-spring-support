@@ -20,37 +20,15 @@
   </properties>
   <body>
     <section name="Building from source">
-      <subsection name="Requirements">
-        <ul>
-          <li>
-            <p>Java 7 JDK</p>
-          </li>
-          <li>
-            <p>Maven 3</p>
-          </li>
-          <li>
-            <p>Subversion client</p>
-          </li>
-        </ul>
-      </subsection>
-      <subsection name="Checkout the source code">
+      <subsection name="Check out demo application">
         <p>
-          Check out the trunk source code from the SVN repository:
+          Fork me on GitHub: <a href="https://github.com/onehippo-forge/hst-spring-support" target="_blank">https://github.com/onehippo-forge/hst-spring-support</a>.
         </p>
-        <div class="brush: bash">
-        <source>$ svn co https://forge.onehippo.org/svn/hst-spring-sup/trunk hst-spring-sup</source>
-        </div>
         <p>
           Build the project using Maven:
         </p>
         <div class="brush: bash">
         <source>$ mvn install</source>
-        </div>
-        <p>
-          Build all the reports and the site (requires Maven 3):
-        </p>
-        <div class="brush: bash">
-        <source>$ mvn site</source>
         </div>
       </subsection>
     </section>

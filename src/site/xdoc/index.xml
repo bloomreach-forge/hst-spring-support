@@ -25,14 +25,14 @@
           For example, HST-2 supports 
           <a href="http://www.onehippo.org/library/concepts/translations/hst-2-dynamic-resource-bundles-support.html">Repository Dynamic ResourceBundle</a>
           stored in the repository.
-          However, <a href="http://docs.spring.io/spring/docs/3.2.13.RELEASE/spring-framework-reference/htmlsingle/#context-functionality-messagesource">Spring Framework Internationalization Support with MessageSource</a>
+          However, <a href="http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#context-functionality-messagesource">Spring Framework Internationalization Support with MessageSource</a>
           is unaware of how to retrieve HST-2 Dynamic ResourceBundles using HST-2 API.
           Therefore, this project provides <a href="apidocs/org/onehippo/forge/hst/spring/support/HstRepositoryResourceBundleMessageSource.html">HstRepositoryResourceBundleMessageSource</a>
           to be able to use HST-2 Dyanmic ResourceBundles as well as the default Java ResourceBundles provided by Spring Framework.
         </p>
         <p>
           Also, this project supports a
-          <a href="http://docs.spring.io/spring/docs/3.2.13.RELEASE/javadoc-api/org/springframework/web/servlet/HandlerExceptionResolver.html">HandlerExceptionResolver</a>
+          <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/HandlerExceptionResolver.html">HandlerExceptionResolver</a>
           which can handle HST page not found exception to forward the request
           to the specified HST 'page-not-found' sitemap item path.
         </p>
@@ -43,8 +43,8 @@
       </subsection>
       <subsection name="HST-2 - Spring Framework Integration References">
         <ul>
+          <li><a href="https://www.onehippo.org/library/concepts/web-application/spring-managed-hst-components.html">Component Level Integration - Spring Managed HST Components</a></li>
           <li><a href="http://www.onehippo.org/library/concepts/web-application/spring-mvc-bridge.html">Component Level Integration - Spring MVC Bridge</a></li>
-          <li><a href="http://www.onehippo.org/library/concepts/web-application/spring-bridge.html">Component Level Integration - Spring Bean Bridge</a></li>
           <li><a href="http://www.onehippo.org/library/concepts/integration/hst-container-integration-with-other-web-application-frameworks.html">Container Level Integration - Spring Web Application</a></li>
         </ul>
       </subsection>
@@ -52,11 +52,6 @@
     <section name="Project status">
       <p>
         Please see <a href="release-notes.html">Release Notes</a>.
-      </p>
-      <p>
-        See the
-        <a href="http://forge.onehippo.org/gf/project/hst-spring-sup">forge project page</a>
-        for more info about the project itself.
       </p>
     </section>
   </body>

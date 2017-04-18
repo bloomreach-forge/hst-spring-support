@@ -35,7 +35,7 @@
         </p>
         <p>
           For example, you may configure the global
-          <a href="http://docs.spring.io/spring/docs/3.2.13.RELEASE/javadoc-api/org/springframework/web/servlet/HandlerExceptionResolver.html">HandlerExceptionResolver</a>
+          <a href="http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/web/servlet/HandlerExceptionResolver.html">HandlerExceptionResolver</a>
           bean like the following example:
         </p>
         <div class="brush: xml">
