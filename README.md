@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/onehippo-forge/hst-spring-support.svg?branch=develop)](https://travis-ci.org/onehippo-forge/hst-spring-support)
 
 # HST Spring Framework Support
 
