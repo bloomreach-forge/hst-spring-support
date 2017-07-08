@@ -32,12 +32,12 @@
         <tr>
           <td>1.1.x</td>
           <td>4.x</td>
-          <td>10.x, 11.x</td>
+          <td>12.x, 11.x, 10.x</td>
         </tr>
         <tr>
           <td>0.1.x</td>
           <td>3.2.x</td>
-          <td>7.8, 7.9+</td>
+          <td>7.9.x, 7.8.x</td>
         </tr>
       </table>
     </section>
