@@ -42,6 +42,15 @@
       </table>
     </section>
     <section name="Release Notes">
+      <subsection name="1.1.2">
+        <p class="smallinfo">
+          Release Date: March 23, 2016
+        </p>
+        <ul>
+          <li>[<a href='https://issues.onehippo.com/browse/HIPFORGE-129'>HIPFORGE-129</a>] -         [HST Spring Support] Make HstRepositoryResourceBundleMessageSource#getStringOrNull(ResourceBundle bundle, String key) protected
+</li>
+        </ul>
+      </subsection>
       <subsection name="1.1.1">
         <p class="smallinfo">
           Release Date: March 23, 2016
