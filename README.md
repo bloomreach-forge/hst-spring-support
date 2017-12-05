@@ -1,5 +1,6 @@
+[![Build Status](https://travis-ci.org/onehippo-forge/hst-spring-support.svg?branch=develop)](https://travis-ci.org/onehippo-forge/hst-spring-support)
 
-# HST - Spring Framework Support
+# HST Spring Framework Support
 
 This project provides components which fill the gap between HST-2 framework and Spring Framework.
 

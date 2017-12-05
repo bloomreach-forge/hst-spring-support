@@ -317,7 +317,12 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
         return null;
     }
 
-    private String getStringOrNull(ResourceBundle bundle, String key) {
+    /*
+     * HIPFORGE-129: As this forge module can be used in Spring Framework [4.0,5.0),
+     * let's change the visibility from private to protected for now.
+     * Since Spring Framework 4.2.x, it has been changed from private to protected as well.
+     */
+    protected String getStringOrNull(ResourceBundle bundle, String key) {
         try {
             return bundle.getString(key);
         } catch (MissingResourceException ex) {
