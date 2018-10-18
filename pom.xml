@@ -34,7 +34,7 @@
     <jstl.version>1.1.2</jstl.version>
 
     <hippo.hst.version>3.1.0</hippo.hst.version>
-    <spring.version>4.1.4.RELEASE</spring.version>
+    <spring.version>4.3.20.RELEASE</spring.version>
 
     <lib.junit.version>4.8.2</lib.junit.version>
     <lib.easymock.version>3.0</lib.easymock.version>
