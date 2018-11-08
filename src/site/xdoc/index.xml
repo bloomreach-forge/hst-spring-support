@@ -22,6 +22,9 @@
           This project provides components which fill the gap between HST-2 framework and Spring Framework.
         </p>
         <p>
+          See <a href="features.html">Features</a> page for all the features.
+        </p>
+        <p>
           For example, HST-2 supports 
           <a href="http://www.onehippo.org/library/concepts/translations/hst-2-dynamic-resource-bundles-support.html">Repository Dynamic ResourceBundle</a>
           stored in the repository.

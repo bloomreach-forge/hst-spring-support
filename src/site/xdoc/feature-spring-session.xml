@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+    Copyright 2018 Hippo Licensed under the Apache License, Version 2.0
+    (the "License"); you may not use this file except in compliance with
+    the License. You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+    applicable law or agreed to in writing, software distributed under
+    the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
+    OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and
+    limitations under the License.
+  --><!DOCTYPE document PUBLIC "-//Apache Software Foundation//DTD XDOC 1.0//EN"
+  "http://maven.apache.org/dtd/xdoc_1_0.dtd">
+<document>
+  <properties>
+    <title>Spring Session integration</title>
+  </properties>
+  <body>
+
+    <section name="Spring Session integration">
+
+      <subsection name="Introduction">
+        <p>
+          <a href="https://spring.io/projects/spring-session">Spring Session</a> project provides an API and implementations
+          for managing a user’s session information. With the project, you can easily integrate with
+          Spring Session Data Redis, Spring Session JDBC, Spring Session Hazelcast, etc.
+        </p>
+        <p>
+          However, in (local) development environment, you might not want to use the backends such as Redis, JDBC or Hazelcast,
+          but you can simply want to use container-provided <code>HttpSession</code> storage internally
+          without changing much Spring Session specific configuration.
+        </p>
+        <p>
+          This project provides <code>org.onehippo.forge.hst.spring.support.session.map.MapHttpSessionConfiguration</code>
+          and <code>org.onehippo.forge.hst.spring.support.session.servlet.HttpSessionDelegatingHttpSessionConfiguration</code>
+          for easy development and transition to the enterprise-level backend system afterward.
+        </p>
+      </subsection>
+
+      <subsection name="Dependencies">
+        <p>
+          As <a href="https://spring.io/projects/spring-session">Spring Session</a> project depends on
+          Spring Framework and <i>optionally</i> on Spring Security Framework, you should make sure all of the
+          compatible dependencies are included in your project, depending on which backend you want to use.
+        </p>
+        <p>
+          For example, the following dependency will not include anything from Spring Framework or Spring Security Framework
+          transitively because it has <i>optional</i> dependencies on those:
+        </p>
+        <div class="brush: xml">
+        <source><![CDATA[
+      <dependency>
+        <groupId>org.springframework.session</groupId>
+        <artifactId>spring-session</artifactId>
+        <version>1.3.3.RELEASE</version>
+      </dependency>
+        ]]></source>
+        </div>
+        <p>
+          <em>Note</em>: Find compatible versions of any dependencies with <code>spring-session</code> and make sure everything included properly.
+        </p>
+      </subsection>
+
+      <subsection name="MapHttpSessionConfiguration">
+        <p>
+          This is a simple <a href="https://docs.spring.io/spring/docs/4.3.x/spring-framework-reference/htmlsingle/#beans-java">Java-based configuration</a>
+          class to use <code>org.springframework.session.MapSessionRepository</code> as <code>SessionRepository</code>.
+        </p>
+        <p>
+          To enable this option, you should add the following in Spring Web Application context configuration file
+          (e.g, <code>/WEB-INF/applicationContext.xml</code>) like the following:
+        </p>
+        <div class="brush: xml">
+        <source><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+  <context:annotation-config />
+
+  <bean class="org.onehippo.forge.hst.spring.support.session.map.MapHttpSessionConfiguration" />
+
+</beans>
+        ]]></source>
+        </div>
+        <p>
+          And you should add the following servlet filter configuration in <code>web.xml</code>:
+        </p>
+        <div class="brush: xml">
+        <source><![CDATA[
+
+  <!-- SNIP -->
+
+  <filter>
+    <filter-name>springSessionRepositoryFilter</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+
+  <!-- SNIP -->
+
+  <filter-mapping>
+    <filter-name>springSessionRepositoryFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- SNIP -->
+
+        ]]></source>
+        </div>
+        <p>
+          <em>Note: </em> The <code>springSessionRepositoryFilter</code> filter mapping should be put before <code>HstFilter</code>
+          or any other servlet filters which could involve <code>HttpSession</code> usages.
+        </p>
+      </subsection>
+
+      <subsection name="HttpSessionDelegatingHttpSessionConfiguration">
+        <p>
+          This is a simple <a href="https://docs.spring.io/spring/docs/4.3.x/spring-framework-reference/htmlsingle/#beans-java">Java-based configuration</a>
+          class to use <code>org.onehippo.forge.hst.spring.support.session.servlet.HttpSessionDelegatingRepository</code> as <code>SessionRepository</code>.
+        </p>
+        <p>
+          <code>HttpSessionDelegatingRepository</code> is mostly for (local) development purpose.
+          By using almost the same configuration even in the development mode, you can easily switch the spring-session
+          configuration easily, without having to change your <code>web.xml</code> in (local) development to disable
+          spring-session filters for instance.
+        </p>
+        <p>
+          To enable this option, you should add the following in Spring Web Application context configuration file
+          (e.g, <code>/WEB-INF/applicationContext.xml</code>) like the following:
+        </p>
+        <div class="brush: xml">
+        <source><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+
+  <context:annotation-config />
+
+  <bean class="org.onehippo.forge.hst.spring.support.session.servlet.HttpSessionDelegatingHttpSessionConfiguration" />
+
+</beans>
+        ]]></source>
+        </div>
+        <p>
+          And you should add the following servlet filter configuration in <code>web.xml</code>:
+        </p>
+        <div class="brush: xml">
+        <source><![CDATA[
+
+  <!-- SNIP -->
+
+  <filter>
+    <filter-name>servletRequestAwareFilter</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+
+  <filter>
+    <filter-name>springSessionRepositoryFilter</filter-name>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+  </filter>
+
+  <!-- SNIP -->
+
+  <filter-mapping>
+    <filter-name>servletRequestAwareFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>springSessionRepositoryFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- SNIP -->
+
+        ]]></source>
+        </div>
+        <p>
+          <em>Note: </em> Both <code>servletRequestAwareFilter</code> and <code>springSessionRepositoryFilter</code>
+          filter mappings should be put before <code>HstFilter</code>
+          or any other servlet filters which could involve <code>HttpSession</code> usages.
+          <code>servletRequestAwareFilter</code> allows the next filter chain invocation to access the current
+          <code>HttpServletRequest</code> object from which <code>HttpSessionDelegatingRepository</code> may
+          access the current request's <code>HttpSession</code> object.
+        </p>
+
+      </subsection>
+
+    </section>
+
+  </body>
+</document>
