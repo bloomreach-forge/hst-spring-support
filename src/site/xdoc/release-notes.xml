@@ -20,35 +20,49 @@
       <table>
         <tr>
           <th>
-            Plugin Version
+            Plugin
           </th>
           <th>
-            Spring Framework Version
+            Hippo CMS
           </th>
           <th>
-            Hippo CMS Release Version
+            Spring Framework
+          </th>
+          <th>
+            Spring Session (Optional)
           </th>
         </tr>
         <tr>
           <td>1.1.x</td>
-          <td>4.x</td>
           <td>12.x, 11.x, 10.x</td>
+          <td>4.x</td>
+          <td>1.x</td>
         </tr>
         <tr>
           <td>0.1.x</td>
-          <td>3.2.x</td>
           <td>7.9.x, 7.8.x</td>
+          <td>3.2.x</td>
+          <td>N/A</td>
         </tr>
       </table>
     </section>
     <section name="Release Notes">
+      <subsection name="1.1.3">
+        <p class="smallinfo">
+          Release Date: November 8, 2018
+        </p>
+        <ul>
+          <li>[<a href='https://issues.onehippo.com/browse/HIPFORGE-233'>HIPFORGE-233</a>] -         [HST Spring Support] Simple bridging for development purpose for spring-session
+          </li>
+        </ul>
+      </subsection>
       <subsection name="1.1.2">
         <p class="smallinfo">
           Release Date: March 23, 2016
         </p>
         <ul>
           <li>[<a href='https://issues.onehippo.com/browse/HIPFORGE-129'>HIPFORGE-129</a>] -         [HST Spring Support] Make HstRepositoryResourceBundleMessageSource#getStringOrNull(ResourceBundle bundle, String key) protected
-</li>
+          </li>
         </ul>
       </subsection>
       <subsection name="1.1.1">

@@ -14,16 +14,16 @@
 <project name="HST - Spring Framework Support Documentation">
 
   <skin>
-    <groupId>org.onehippo.forge.mavenskin</groupId>
+    <groupId>org.bloomreach.forge.mavenskin</groupId>
     <artifactId>forge-maven-skin</artifactId>
-    <version>2.0.1</version>
+    <version>3.0.1</version>
   </skin>
 
   <custom>
     <hippoSkin>
       <!-- Add a 'Fork me on GitHub' ribbon  -->
       <gitHub>
-        <projectId>onehippo-forge/hst-spring-support</projectId>
+        <projectId>bloomreach-forge/hst-spring-support</projectId>
       </gitHub>
     </hippoSkin>
   </custom>
@@ -33,14 +33,13 @@
     <menu name="Home">
       <item name="Home" href="index.html" />
       <item name="Installation" href="install.html" />
-      <item name="Build from source" href="build-from-source.html" />
+      <item name="Features" href="features.html">
+        <item name="HST-2 Repository ResourceBundle MessageSource" href="feature-repobundlemsgsource.html" />
+        <item name="HST-2 Page Not Found Exception Handler Integration" href="feature-pagenotfound.html" />
+        <item name="Spring-Session Integration" href="feature-spring-session.html" />
+      </item>
       <item name="JavaDocs" href="apidocs/index.html" />
       <item name="Release Notes" href="release-notes.html" />
-    </menu>
-
-    <menu name="Features">
-      <item name="HST-2 Repository ResourceBundle MessageSource" href="feature-repobundlemsgsource.html" />
-      <item name="HST-2 Page Not Found Exception Handler Integration" href="feature-pagenotfound.html" />
     </menu>
 
     <menu ref="reports" />
