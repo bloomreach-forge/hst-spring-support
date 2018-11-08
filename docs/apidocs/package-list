@@ -1,0 +1,5 @@
+org.onehippo.forge.hst.spring.support
+org.onehippo.forge.hst.spring.support.session.map
+org.onehippo.forge.hst.spring.support.session.servlet
+org.onehippo.forge.hst.spring.support.util
+org.onehippo.forge.hst.spring.support.web
