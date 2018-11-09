@@ -58,9 +58,11 @@ public class HttpSessionDelegatingRepository implements SessionRepository<Expiri
         ExpiringSession session = (ExpiringSession) httpSession.getAttribute(HttpSessionDelegatingSession.NAME);
 
         if (session != null) {
+            // If previous JSESSIONID cookie in browser's in-memory session remains while tomcat gets restarted,
+            // then we need to recreate ExpiringSession again.
             if (!httpSession.getId().equals(id)) {
-                session = null;
-                httpSession.removeAttribute(HttpSessionDelegatingSession.NAME);
+                session = new HttpSessionDelegatingSession(httpSession);
+                httpSession.setAttribute(HttpSessionDelegatingSession.NAME, session);
             }
         }
 

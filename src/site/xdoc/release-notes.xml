@@ -47,6 +47,15 @@
       </table>
     </section>
     <section name="Release Notes">
+      <subsection name="1.1.4">
+        <p class="smallinfo">
+          Release Date: November 8, 2018
+        </p>
+        <ul>
+          <li>[<a href='https://issues.onehippo.com/browse/HIPFORGE-234'>HIPFORGE-234</a>] -         [HST Spring Support] With HttpSessionDelegatingRepository option, it fails when tomcat restarted
+          </li>
+        </ul>
+      </subsection>
       <subsection name="1.1.3">
         <p class="smallinfo">
           Release Date: November 8, 2018
