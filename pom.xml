@@ -22,7 +22,7 @@
   <groupId>org.onehippo.forge.hst-spring-support</groupId>
   <artifactId>hst-spring-support</artifactId>
   <version>1.1.4</version>
-  <url>https://onehippo-forge.github.io/hst-spring-support/</url>
+  <url>https://bloomreach-forge.github.io/hst-spring-support/</url>
 
   <properties>
 
@@ -83,9 +83,9 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git@github.com:onehippo-forge/hst-spring-support.git</connection>
-    <developerConnection>scm:git:git@github.com:onehippo-forge/hst-spring-support.git</developerConnection>
-    <url>https://github.com/onehippo-forge/hst-spring-support.git</url>
+    <connection>scm:git:git@github.com:bloomreach-forge/hst-spring-support.git</connection>
+    <developerConnection>scm:git:git@github.com:bloomreach-forge/hst-spring-support.git</developerConnection>
+    <url>https://github.com/bloomreach-forge/hst-spring-support.git</url>
     <tag>HEAD</tag>
   </scm>
 
@@ -96,7 +96,7 @@
 
   <ciManagement>
     <system>Travis CI</system>
-    <url>https://travis-ci.org/onehippo-forge/hst-spring-support</url>
+    <url>https://travis-ci.org/bloomreach-forge/hst-spring-support</url>
   </ciManagement>
 
   <distributionManagement>
