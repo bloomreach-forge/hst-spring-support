@@ -15,9 +15,13 @@
  */
 package org.onehippo.forge.hst.spring.support.session.map;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.session.MapSessionRepository;
+import org.springframework.session.Session;
 import org.springframework.session.config.annotation.web.http.EnableSpringHttpSession;
 import org.springframework.session.config.annotation.web.http.SpringHttpSessionConfiguration;
 
@@ -30,7 +34,8 @@ public class MapHttpSessionConfiguration extends SpringHttpSessionConfiguration 
 
     @Bean
     public MapSessionRepository sessionRepository() {
-        return new MapSessionRepository();
+        final Map<String, Session> sessions = new HashMap<>();
+        return new MapSessionRepository(sessions);
     }
 
 }
