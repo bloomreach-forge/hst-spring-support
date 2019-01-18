@@ -15,8 +15,6 @@
  */
 package org.onehippo.forge.hst.spring.support;
 
-import static org.junit.Assert.assertEquals;
-
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
@@ -32,8 +30,6 @@ import org.hippoecm.hst.core.container.ComponentManager;
 import org.hippoecm.hst.mock.core.request.MockHstRequestContext;
 import org.hippoecm.hst.resourcebundle.ResourceBundleRegistry;
 import org.hippoecm.hst.resourcebundle.SimpleListResourceBundle;
-import org.hippoecm.hst.resourcebundle.internal.DefaultMutableResourceBundleFamily;
-import org.hippoecm.hst.resourcebundle.internal.DefaultMutableResourceBundleRegistry;
 import org.hippoecm.hst.site.HstServices;
 import org.hippoecm.hst.util.DefaultKeyValue;
 import org.hippoecm.hst.util.KeyValue;
@@ -41,6 +37,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.DelegatingMessageSource;
 import org.springframework.mock.web.MockHttpServletRequest;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * HstRepositoryResourceBundleMessageSourceTest
@@ -51,7 +49,7 @@ public class HstRepositoryResourceBundleMessageSourceTest {
 
     private static final String REPOSITORY_BUNDLE_ID = HstRepositoryResourceBundleMessageSourceTest.class.getPackage().getName();
 
-    private DefaultMutableResourceBundleRegistry registry;
+    private ResourceBundleRegistry registry;
 
     private ResourceBundle localizationContextBundle;
     private ResourceBundle previewLocalizationContextBundle;
@@ -92,12 +90,7 @@ public class HstRepositoryResourceBundleMessageSourceTest {
         previewBundleContent.put("greeting.howdy.name", "[Preview] Howdy, {0}!");
         previewBundle = new SimpleListResourceBundle(previewBundleContent);
 
-        final DefaultMutableResourceBundleFamily bundleFamily = new DefaultMutableResourceBundleFamily(REPOSITORY_BUNDLE_ID);
-        bundleFamily.setDefaultBundle(liveBundle);
-        bundleFamily.setDefaultBundleForPreview(previewBundle);
-        registry = new DefaultMutableResourceBundleRegistry();
-        registry.setFallbackToJavaResourceBundle(true);
-        registry.registerBundleFamily(REPOSITORY_BUNDLE_ID, bundleFamily);
+        resetMockResourceBundleRegistry(liveBundle, previewBundle);
 
         final ComponentManager componentManager = EasyMock.createNiceMock(ComponentManager.class);
         EasyMock.expect(componentManager.getComponent(ResourceBundleRegistry.class.getName())).andReturn(registry).anyTimes();
@@ -375,10 +368,7 @@ public class HstRepositoryResourceBundleMessageSourceTest {
         liveBundle = new SimpleListResourceBundle(liveBundleContent);
         previewBundle = new SimpleListResourceBundle(liveBundleContent);
 
-        final DefaultMutableResourceBundleFamily bundleFamily = new DefaultMutableResourceBundleFamily(REPOSITORY_BUNDLE_ID);
-        bundleFamily.setDefaultBundle(liveBundle);
-        bundleFamily.setDefaultBundleForPreview(previewBundle);
-        registry.registerBundleFamily(REPOSITORY_BUNDLE_ID, bundleFamily);
+        resetMockResourceBundleRegistry(liveBundle, previewBundle);
 
         assertEquals("Hello, World!", messageSource.getMessage("greeting.hello", null, Locale.ENGLISH));
         assertEquals("Hello, John! Are you sure you are really cool?", messageSource.getMessage("greeting.hello.name", new Object [] { "John" }, Locale.ENGLISH));
@@ -426,5 +416,23 @@ public class HstRepositoryResourceBundleMessageSourceTest {
         assertEquals("Hello, John! Are you really cool?", delegatingMessageSource.getMessage("greeting.hello.name", new Object [] { "John" }, null, Locale.ENGLISH));
         assertEquals("Howdy, John!", delegatingMessageSource.getMessage("greeting.howdy.name", new Object [] { "John" }, Locale.ENGLISH));
         assertEquals("Howdy, John!", delegatingMessageSource.getMessage("greeting.howdy.name", new Object [] { "John" }, null, Locale.ENGLISH));
+    }
+
+    private void resetMockResourceBundleRegistry(final ResourceBundle liveBundle, ResourceBundle previewBundle) {
+        registry = EasyMock.createNiceMock(ResourceBundleRegistry.class);
+        EasyMock.expect(registry.getBundle(REPOSITORY_BUNDLE_ID, Locale.ENGLISH)).andReturn(liveBundle).anyTimes();
+        EasyMock.expect(registry.getBundleForPreview(REPOSITORY_BUNDLE_ID, Locale.ENGLISH)).andReturn(previewBundle)
+                .anyTimes();
+        EasyMock.expect(registry.getBundle(FILE_BUNDLE_ID, Locale.ENGLISH))
+                .andReturn(ResourceBundle.getBundle(FILE_BUNDLE_ID, Locale.ENGLISH)).anyTimes();
+        EasyMock.expect(registry.getBundleForPreview(FILE_BUNDLE_ID, Locale.ENGLISH))
+                .andReturn(ResourceBundle.getBundle(FILE_BUNDLE_ID, Locale.ENGLISH)).anyTimes();
+        EasyMock.replay(registry);
+
+        final ComponentManager componentManager = EasyMock.createNiceMock(ComponentManager.class);
+        EasyMock.expect(componentManager.getComponent(ResourceBundleRegistry.class.getName())).andReturn(registry)
+                .anyTimes();
+        EasyMock.replay(componentManager);
+        HstServices.setComponentManager(componentManager);
     }
 }
