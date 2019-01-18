@@ -16,26 +16,29 @@
 package org.onehippo.forge.hst.spring.support.session.servlet;
 
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.session.ExpiringSession;
+import org.springframework.session.Session;
 
 /**
- * {@link ExpiringSession} implementation simply by delegating call to the underlying container's {@link HttpSession}.
+ * {@link Session} implementation simply by delegating call to the underlying container's {@link HttpSession}.
  */
-public class HttpSessionDelegatingSession implements ExpiringSession, Serializable {
+public class HttpSessionDelegatingSession implements Session, Serializable {
 
     private static final long serialVersionUID = 1L;
 
     static final String NAME = HttpSessionDelegatingSession.class.getName();
 
     private transient HttpSession httpSession;
-    private long lastAccessedTime;
+    private Instant lastAccessedTime;
 
     HttpSessionDelegatingSession(final HttpSession httpSession) {
         this.httpSession = httpSession;
@@ -73,41 +76,52 @@ public class HttpSessionDelegatingSession implements ExpiringSession, Serializab
     }
 
     @Override
-    public long getCreationTime() {
-        return httpSession.getCreationTime();
+    public Instant getCreationTime() {
+        return Instant.ofEpochMilli(httpSession.getCreationTime());
     }
 
     @Override
-    public void setLastAccessedTime(long lastAccessedTime) {
+    public void setLastAccessedTime(Instant lastAccessedTime) {
         this.lastAccessedTime = lastAccessedTime;
     }
 
     @Override
-    public long getLastAccessedTime() {
-        if (lastAccessedTime > 0) {
+    public Instant getLastAccessedTime() {
+        if (lastAccessedTime != null) {
             return lastAccessedTime;
         }
 
-        return httpSession.getLastAccessedTime();
+        return Instant.ofEpochMilli(httpSession.getLastAccessedTime());
     }
 
     @Override
-    public void setMaxInactiveIntervalInSeconds(int interval) {
-        httpSession.setMaxInactiveInterval(interval);
+    public void setMaxInactiveInterval(Duration interval) {
+        httpSession.setMaxInactiveInterval((int) interval.getSeconds());
     }
 
     @Override
-    public int getMaxInactiveIntervalInSeconds() {
-        return httpSession.getMaxInactiveInterval();
+    public Duration getMaxInactiveInterval() {
+        return Duration.ofSeconds(httpSession.getMaxInactiveInterval());
     }
 
     @Override
     public boolean isExpired() {
-        if (System.currentTimeMillis() - getLastAccessedTime() > 1000L * (long) getMaxInactiveIntervalInSeconds()) {
+        final long lastAccessedTimeMillis = getLastAccessedTime().toEpochMilli();
+        final long maxInactiveIntervalSeconds = getMaxInactiveInterval().getSeconds();
+
+        if (System.currentTimeMillis() - lastAccessedTimeMillis > 1000L * maxInactiveIntervalSeconds) {
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public String changeSessionId() {
+        final HttpServletRequest request = HttpSessionDelegatingContext.getCurrentServletRequest();
+        httpSession.invalidate();
+        httpSession = request.getSession(true);
+        return httpSession.getId();
     }
 
 }
