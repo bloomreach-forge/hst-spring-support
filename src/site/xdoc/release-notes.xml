@@ -53,6 +53,15 @@
       </table>
     </section>
     <section name="Release Notes (2.x)">
+      <subsection name="2.0.1">
+        <p class="smallinfo">
+          Release Date: January 24, 2019
+        </p>
+        <ul>
+          <li>[<a href='https://issues.onehippo.com/browse/HIPFORGE-269'>HIPFORGE-269</a>] -         [HST Spring Support] Avoid side effect by using same session attributes as underlying HttpSession's
+          </li>
+        </ul>
+      </subsection>
       <subsection name="2.0.0">
         <p class="smallinfo">
           Release Date: January 18, 2019

@@ -18,16 +18,15 @@ package org.onehippo.forge.hst.spring.support.session.servlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.session.Session;
 import org.springframework.session.SessionRepository;
 
 /**
  * {@link SessionRepository} implementation simply by delegating call to the underlying servlet container's {@link HttpSession}.
  */
-public class HttpSessionDelegatingRepository implements SessionRepository<Session> {
+public class HttpSessionDelegatingRepository implements SessionRepository<HttpSessionDelegatingSession> {
 
     @Override
-    public Session createSession() {
+    public HttpSessionDelegatingSession createSession() {
         final HttpServletRequest request = HttpSessionDelegatingContext.getCurrentServletRequest();
 
         if (request == null) {
@@ -35,19 +34,19 @@ public class HttpSessionDelegatingRepository implements SessionRepository<Sessio
         }
 
         final HttpSession httpSession = request.getSession(true);
-        final Session session = new HttpSessionDelegatingSession(httpSession);
+        final HttpSessionDelegatingSession session = new HttpSessionDelegatingSession(httpSession);
         httpSession.setAttribute(HttpSessionDelegatingSession.NAME, session);
 
         return session;
     }
 
     @Override
-    public void save(Session session) {
+    public void save(HttpSessionDelegatingSession session) {
         // Nothing to do as container's session management does care of it.
     }
 
     @Override
-    public Session findById(String id) {
+    public HttpSessionDelegatingSession findById(String id) {
         final HttpServletRequest request = HttpSessionDelegatingContext.getCurrentServletRequest();
         final HttpSession httpSession = (request != null) ? request.getSession(false) : null;
 
@@ -55,7 +54,7 @@ public class HttpSessionDelegatingRepository implements SessionRepository<Sessio
             return null;
         }
 
-        Session session = (Session) httpSession.getAttribute(HttpSessionDelegatingSession.NAME);
+        HttpSessionDelegatingSession session = (HttpSessionDelegatingSession) httpSession.getAttribute(HttpSessionDelegatingSession.NAME);
 
         if (session != null) {
             // If previous JSESSIONID cookie in browser's in-memory session remains while tomcat gets restarted,
@@ -71,6 +70,19 @@ public class HttpSessionDelegatingRepository implements SessionRepository<Sessio
 
     @Override
     public void deleteById(String id) {
-        // Nothing to do as container's session management does care of it.
+        final HttpServletRequest request = HttpSessionDelegatingContext.getCurrentServletRequest();
+        final HttpSession httpSession = (request != null) ? request.getSession(false) : null;
+
+        if (httpSession == null) {
+            return;
+        }
+
+        HttpSessionDelegatingSession session = (HttpSessionDelegatingSession) httpSession.getAttribute(HttpSessionDelegatingSession.NAME);
+
+        if (session != null) {
+            if (session.getId().equals(id)) {
+                httpSession.invalidate();
+            }
+        }
     }
 }

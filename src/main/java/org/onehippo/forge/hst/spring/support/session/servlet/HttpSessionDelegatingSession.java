@@ -19,9 +19,10 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -37,6 +38,8 @@ public class HttpSessionDelegatingSession implements Session, Serializable {
 
     static final String NAME = HttpSessionDelegatingSession.class.getName();
 
+    private static final String SESSION_ATTRS_MAP_KEY = HttpSessionDelegatingSession.class.getName() + ".sessionAttrsMap";
+
     private transient HttpSession httpSession;
     private Instant lastAccessedTime;
 
@@ -51,15 +54,22 @@ public class HttpSessionDelegatingSession implements Session, Serializable {
 
     @Override
     public <T> T getAttribute(String attributeName) {
-        return (T) httpSession.getAttribute(attributeName);
+        final Map<String, Object> sessionAttrs = (Map<String, Object>) httpSession.getAttribute(SESSION_ATTRS_MAP_KEY);
+        return (sessionAttrs != null) ? (T) sessionAttrs.get(attributeName) : null;
     }
 
     @Override
     public Set<String> getAttributeNames() {
-        final Set<String> attrNames = new HashSet<>();
+        final Map<String, Object> sessionAttrs = (Map<String, Object>) httpSession.getAttribute(SESSION_ATTRS_MAP_KEY);
 
-        for (Enumeration<String> e = httpSession.getAttributeNames(); e.hasMoreElements();) {
-            attrNames.add(e.nextElement());
+        if (sessionAttrs == null) {
+            return Collections.emptySet();
+        }
+
+        Set<String> attrNames;
+
+        synchronized (sessionAttrs) {
+            attrNames = new HashSet<>(sessionAttrs.keySet());
         }
 
         return Collections.unmodifiableSet(attrNames);
@@ -67,12 +77,23 @@ public class HttpSessionDelegatingSession implements Session, Serializable {
 
     @Override
     public void setAttribute(String attributeName, Object attributeValue) {
-        httpSession.setAttribute(attributeName, attributeValue);
+        Map<String, Object> sessionAttrs = (Map<String, Object>) httpSession.getAttribute(SESSION_ATTRS_MAP_KEY);
+
+        if (sessionAttrs == null) {
+            sessionAttrs = new ConcurrentHashMap<>();
+            httpSession.setAttribute(SESSION_ATTRS_MAP_KEY, sessionAttrs);
+        }
+
+        sessionAttrs.put(attributeName, attributeValue);
     }
 
     @Override
     public void removeAttribute(String attributeName) {
-        httpSession.removeAttribute(attributeName);
+        final Map<String, Object> sessionAttrs = (Map<String, Object>) httpSession.getAttribute(SESSION_ATTRS_MAP_KEY);
+
+        if (sessionAttrs != null) {
+            sessionAttrs.remove(attributeName);
+        }
     }
 
     @Override
