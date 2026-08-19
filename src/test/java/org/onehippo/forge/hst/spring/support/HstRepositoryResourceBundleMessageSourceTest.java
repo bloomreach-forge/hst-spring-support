@@ -21,8 +21,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import javax.servlet.jsp.jstl.core.Config;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
+import jakarta.servlet.jsp.jstl.core.Config;
+import jakarta.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import org.easymock.EasyMock;
 import org.hippoecm.hst.container.ModifiableRequestContextProvider;
