@@ -58,6 +58,17 @@
         </tr>
       </table>
     </section>
+    <section name="Release Notes (3.x)">
+      <subsection name="3.0.0">
+        <p class="smallinfo">
+          Release Date: xyz 08, 2026
+        </p>
+        <ul>
+          <li>[<a href='https://bloomreach.atlassian.net/browse/FORGE-xyz'>FORGE-xyz</a>] -         [HST Spring Support] Upgrade to support v16 &amp; v17 CMS versions
+          </li>
+        </ul>
+      </subsection>
+    </section>
     <section name="Release Notes (2.x)">
       <subsection name="2.0.1">
         <p class="smallinfo">

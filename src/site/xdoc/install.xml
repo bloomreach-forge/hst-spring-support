@@ -36,11 +36,12 @@
       <!-- SNIP -->
 
       <repository>
-        <id>hippo-maven2-forge</id>
-        <name>Hippo Maven 2 Forge repository</name>
-        <url>http://maven.onehippo.com/maven2-forge/</url>
+          <id>bloomreach-maven2-forge</id>
+          <name>Bloomreach Maven 2 Forge</name>
+          <url>https://maven.bloomreach.com/maven2-forge/</url>
         <snapshots />
       </repository>
+
 
       <!-- SNIP -->
 
