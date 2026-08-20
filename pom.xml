@@ -17,6 +17,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+
+  <parent>
+    <groupId>org.onehippo.cms7</groupId>
+    <artifactId>hippo-cms7-project</artifactId>
+    <version>16.9.4</version>
+  </parent>
+  
   <name>HST - Spring Framework Support</name>
   <description>HST - Spring Framework Support</description>
   <groupId>org.onehippo.forge.hst-spring-support</groupId>
@@ -26,20 +33,8 @@
 
   <properties>
 
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.build.javaVersion>17</project.build.javaVersion>
 
-    <javax.jcr.version>2.0</javax.jcr.version>
-    <servlet-api.version>6.0.0</servlet-api.version>
-    <jstl-api.version>3.0.0</jstl-api.version>
-
-    <hippo.hst.version>16.0.0</hippo.hst.version>
-    <spring.version>6.1.8</spring.version>
     <spring-session.version>3.3.1</spring-session.version>
-
-    <lib.junit.version>4.13.2</lib.junit.version>
-    <lib.easymock.version>4.3</lib.easymock.version>
-    <lib.slf4j.version>1.7.36</lib.slf4j.version>
 
     <plugin.compiler.version>3.13.0</plugin.compiler.version>
     <plugin.clean.version>2.5</plugin.clean.version>
@@ -56,6 +51,9 @@
     <plugin.source.version>2.2.1</plugin.source.version>
     <plugin.surefire.version>3.2.5</plugin.surefire.version>
     <plugin.surefire-report.version>2.17</plugin.surefire-report.version>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.build.javaVersion>17</project.build.javaVersion>
 
   </properties>
 
@@ -141,14 +139,14 @@
     <dependency>
       <groupId>org.onehippo.cms7.hst</groupId>
       <artifactId>hst-api</artifactId>
-      <version>${hippo.hst.version}</version>
+      <version>${hippo.release.version}</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.onehippo.cms7.hst</groupId>
       <artifactId>hst-commons</artifactId>
-      <version>${hippo.hst.version}</version>
+      <version>${hippo.release.version}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -207,54 +205,64 @@
       <scope>provided</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${lib.slf4j.version}</version>
-      <scope>provided</scope>
-    </dependency>
+
 
     <!-- TEST DEPENDENCIES -->
 
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>${lib.slf4j.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
-      <version>${lib.slf4j.version}</version>
+      <version>${slf4j2.version}</version>
       <scope>test</scope>
     </dependency>
-
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j2-impl</artifactId>
+      <version>${log4j2.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>${log4j2.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${log4j2.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- only (should) be needed to (test)compile log4j1.x (backward compatible) usages -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-1.2-api</artifactId>
+      <version>${log4j2.version}</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>${lib.junit.version}</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.easymock</groupId>
       <artifactId>easymock</artifactId>
-      <version>${lib.easymock.version}</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.onehippo.cms7.hst</groupId>
       <artifactId>hst-mock</artifactId>
-      <version>${hippo.hst.version}</version>
+      <version>${hippo.release.version}</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
       <groupId>org.onehippo.cms7.hst.components</groupId>
       <artifactId>hst-resourcebundle</artifactId>
-      <version>${hippo.hst.version}</version>
+      <version>${hippo.release.version}</version>
       <scope>test</scope>
     </dependency>
 
