@@ -20,8 +20,8 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import javax.servlet.jsp.jstl.core.Config;
-import javax.servlet.jsp.jstl.fmt.LocalizationContext;
+import jakarta.servlet.jsp.jstl.core.Config;
+import jakarta.servlet.jsp.jstl.fmt.LocalizationContext;
 
 import org.hippoecm.hst.container.RequestContextProvider;
 import org.hippoecm.hst.core.request.HstRequestContext;
@@ -33,7 +33,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 
 /**
  * {@link org.springframework.context.MessageSource} implementation that
- * accesses {@link Config#get(javax.servlet.ServletRequest, String)} to read the default
+ * accesses {@link Config#get(jakarta.servlet.ServletRequest, String)} to read the default
  * {@link LocalizationContext} which can be set by HST-2 Container ({@code LocalizationValve}).
  * (if {@link #isLocalizationContextResourceBundleEnabled()} returns true (by default))
  * to resolve {@link MessageFormat}.
@@ -44,7 +44,7 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
 
     /**
      * Flag whether or not the default resource bundle should be found from {@link LocalizationContext}
-     * by calling on {@link Config#get(javax.servlet.ServletRequest, String)}
+     * by calling on {@link Config#get(jakarta.servlet.ServletRequest, String)}
      * in {@link #resolveCode(String, Locale)}.
      * It's true by default.
      */
@@ -68,9 +68,9 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
 
     /**
      * Returns true if the default resource bundle should be found from {@link LocalizationContext}
-     * by calling on {@link Config#get(javax.servlet.ServletRequest, String)}.
+     * by calling on {@link Config#get(jakarta.servlet.ServletRequest, String)}.
      * @return true if the default resource bundle should be found from {@link LocalizationContext}
-     * by calling on {@link Config#get(javax.servlet.ServletRequest, String)}
+     * by calling on {@link Config#get(jakarta.servlet.ServletRequest, String)}
      */
     public boolean isLocalizationContextResourceBundleEnabled() {
         return localizationContextResourceBundleEnabled;
@@ -78,9 +78,9 @@ public class HstRepositoryResourceBundleMessageSource extends ResourceBundleMess
 
     /**
      * Sets the flag whether or not the default resource bundle should be found from {@link LocalizationContext}
-     * by calling on {@link Config#get(javax.servlet.ServletRequest, String)}.
+     * by calling on {@link Config#get(jakarta.servlet.ServletRequest, String)}.
      * @param localizationContextResourceBundleEnabled the flag whether or not the default resource bundle should be found from {@link LocalizationContext}
-     * by calling on {@link Config#get(javax.servlet.ServletRequest, String)}
+     * by calling on {@link Config#get(jakarta.servlet.ServletRequest, String)}
      */
     public void setLocalizationContextResourceBundleEnabled(boolean localizationContextResourceBundleEnabled) {
         this.localizationContextResourceBundleEnabled = localizationContextResourceBundleEnabled;
